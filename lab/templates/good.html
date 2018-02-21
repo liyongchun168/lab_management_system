@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% block title %}
+物品管理
+{% endblock %}
+{% block style %}
+    <style>
+        .table th, .table td {
+        text-align: center;
+        vertical-align: middle!important;
+}
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+<form class="form-inline" role="form" method="POST">
+    {% csrf_token %}
+  <div class="form-group">
+    <input type="text" class="form-control" name="name" placeholder="物品名称">
+  </div>
+
+    <div class="form-group">
+    <input type="number"  class="form-control" name="price" placeholder="请输入一个整数价格">
+  </div>
+
+    <div class="form-group">
+        <input type="number" class="form-control" name="num" placeholder="请输入数量">
+    </div>
+  <button type="submit" class="btn btn-default">添加</button>
+</form>
+
+
+<table class="table table-bordered">
+{#    <caption>物品列表</caption>#}
+    <thead>
+        <tr>
+            <th>物品</th>
+            <th>价格</th>
+            <th>数量</th>
+            <th>是否可用</th>
+            <th>借还情况</th>
+            <th>使用状态</th>
+            {% if perms.lab.change_good and perms.lab.delete_good %}
+                <th>操作</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for good in goods %}
+            <tr>
+                <td>{{ good.name }}</td>
+                <td>{{ good.price }}</td>
+                <td>{{ good.num }}</td>
+                <td>{{ good.ke_yong }}</td>
+                <td>{{ good.jie}}</td>
+                <td>{{ good.shi_yong_qing_kuang }}</td>
+                {% if perms.lab.change_good and perms.lab.delete_good %}
+                <td>
+                    <a href="{% url 'del_good' good.id %}"><span class="glyphicon glyphicon-trash"></span></a>
+                    <a href="{% url 'edit_good' good.id %}"><span class="glyphicon glyphicon-edit"></span></a>
+                </td>
+                {% endif %}
+
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<nav aria-label="Page navigation">
+  <ul class="pagination">
+      {% if goods.has_previous %}
+          <li>
+              <a href="?page={{ goods.previous_page_number }}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+          </li>
+      {% endif %}
+
+    {%  for pg in goods.paginator.page_range %}
+        {% if goods.number == pg %}
+            <li class="active"><a href="?page={{ pg }}">{{ pg }}</a></li>
+        {% else %}
+            <li><a href="?page={{ pg }}">{{ pg }}</a></li>
+        {% endif %}
+    {% endfor %}
+
+    {% if goods.has_next %}
+        <li>
+          <a href="?page={{ goods.next_page_number }}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+        {% endif %}
+  </ul>
+</nav>
+</div>
+{% endblock %}

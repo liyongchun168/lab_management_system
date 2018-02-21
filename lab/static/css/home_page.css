@@ -1,0 +1,42 @@
+body{
+            font-family: "Helvetica Neue",Helvetica,Arial,"Microsoft Yahei UI","Microsoft Yahei",SimHei,"\5888\4F53",simsum,sans-serif;
+            background-color: #EDF4FA;
+        }
+.tab1{
+	padding-top:10px;
+}
+.panel-heading{
+	height:45px;
+}
+.info{
+	margin-right: 10px;
+}
+.title{
+	float:left; 
+	font-size: 20px;
+}
+.more{
+	float:right;
+	font-size: 15px;
+}
+.more a{
+	text-decoration: none;
+}
+.picture{
+	width:110px;
+	height:150px;
+	float:right;
+	margin-right: 40px;
+	margin-bottom: 20px;
+	background-color: #000000;
+}
+.progress{
+	margin-bottom:5px;
+}
+h4{
+	font-weight: bold;
+}
+.tab2-title{
+	font-weight: bold;
+	font-size: 20px;
+}

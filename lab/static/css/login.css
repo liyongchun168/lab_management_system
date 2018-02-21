@@ -1,0 +1,55 @@
+body{
+    font-family: "Helvetica Neue",Helvetica,Arial,"Microsoft Yahei UI","Microsoft Yahei",SimHei,"\5888\4F53",simsum,sans-serif;
+    background-color: #EDF4FA;
+
+}
+.container{
+    margin-top: 120px;
+
+}
+.title{
+    font-size: 25px;
+    text-align: center;
+    /*color:#0059b2; */
+}
+.left{
+    display:inline;
+}
+.btn_right{
+    font-size: 15px;
+    display:inline;
+    float:right;
+    width:90px;
+    background:#C6D9F0;
+    /*border-radius:15px;  按钮形成角度*/
+}
+/*小屏幕 《=768px*/
+@media(min-width: 768px){
+    .title{
+        font-size: 27px;
+    }
+    .right{
+        font-size: 16px;
+        width:110px;
+    }
+}
+/*中屏幕 《=992px*/
+@media(min-width:992px){
+    .title{
+        font-size: 29px;
+    }
+    .right{
+        font-size: 17px;
+        width:130px;
+    }
+}
+/*大屏幕 《=1200px*/
+@media(min-width: 1200px){
+    .title{
+        font-size: 31px;
+    }
+    .right{
+        font-size: 18px;
+        width:150px;
+    }
+}

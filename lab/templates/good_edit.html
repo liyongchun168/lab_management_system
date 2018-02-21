@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}物品详情{% endblock %}
+{% block content %}
+    <div class="container">
+    <form action="" method="post" role="form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="">物品名称</label>
+            {{ form.name }}
+        </div>
+        <div class="form-group">
+            <label for="">价格</label>
+            {{ form.price }}
+        </div>
+        <div class="form-group">
+            <label for="">数量</label>
+            {{ form.num }}
+        </div>
+        <div class="form-group">
+            <label for="">借还情况</label>
+            {{ form.jie }}
+        </div>
+        <div class="form-group">
+            <label for="">使用情况</label>
+            {{ form.shi_yong_qing_kuang }}
+        </div>
+        <div>
+            <button class="btn btn-default" type="submit">修改</button>
+        </div>
+    </form>
+    </div>
+{% endblock %}
