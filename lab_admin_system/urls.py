@@ -30,6 +30,7 @@ urlpatterns = [
     url(r'money/del/(\d+)','lab.views.del_money',name='del_money'),
     url(r'^project/list/$','lab.views.project_list',name='project-list'),
     url(r'^project/publish/$','lab.views.project_pulish',name='project-publish'),
+    url(r'^user/(\d+)','lab.views.user_view',name='user_view'),
     # url(r'^person/$','lab.views.person',name='person'),
     # url(r'^good/(\d*)/$','lab.views.good_detail',name='good_detail')
 

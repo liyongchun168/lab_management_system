@@ -6,7 +6,7 @@ from django.db import IntegrityError
 
 class LabMember(models.Model):
     '''实验室成员'''
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User)#OneToOne关系默认使用关联成员的小写，比如这个反查就是user.labmember
     name = models.CharField(max_length=128)
     institute = models.CharField(default=u'信息与计算机学院',max_length=128)
 
@@ -57,8 +57,10 @@ class LabMember(models.Model):
             return True
         return False
 
-    def __uncode__(self):
+    def __unicode__(self):
         return self.name
+
+
 
 class Good(models.Model):
     '''实验室物品'''

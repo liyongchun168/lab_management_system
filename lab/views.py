@@ -136,5 +136,6 @@ def project_list(request):
         projects = paginator.page(paginator.num_pages)
     return render(request,'project-list.html',{'projects':projects})
 
-def test(request):
-    return HttpResponseForbidden('403禁止')
+def user_view(request,user_id):
+
+    return render(request,'user_page.html')

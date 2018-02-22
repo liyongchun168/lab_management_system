@@ -37,4 +37,4 @@ class GoodEditForm(ModelForm):
 class ProjectPulishForm(ModelForm):
     class Meta:
         model = ProjectTeam
-        fields = ('name','introduction')
+        fields = ('name','introduction','leader')
