@@ -13,30 +13,80 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Belonging',
+            name='FindingApplication',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('purpose', models.CharField(max_length=200)),
+                ('status', models.BooleanField(default=False)),
+                ('num', models.IntegerField(default=0)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Good',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=128)),
-                ('price', models.IntegerField()),
-                ('shi_yong_qing_kuang', models.CharField(max_length=128)),
-                ('jie', models.CharField(max_length=128)),
+                ('add_date', models.DateTimeField(auto_now_add=True)),
+                ('price', models.IntegerField(default=0)),
+                ('num', models.IntegerField(default=1)),
+                ('shi_yong_qing_kuang', models.CharField(default='\u65e0', max_length=128)),
+                ('jie', models.CharField(default='\u65e0', max_length=128)),
                 ('ke_yong', models.BooleanField(default=True)),
             ],
+            options={
+                'ordering': ['-add_date'],
+            },
         ),
         migrations.CreateModel(
-            name='Money',
+            name='LabMember',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('use', models.CharField(max_length=128)),
-                ('num', models.IntegerField()),
+                ('name', models.CharField(max_length=128)),
+                ('institute', models.CharField(default='\u4fe1\u606f\u4e0e\u8ba1\u7b97\u673a\u5b66\u9662', max_length=128)),
+                ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
-            name='SchoolUser',
+            name='MessageBoard',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('department', models.CharField(max_length=128)),
-                ('school_user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
+                ('content', models.CharField(max_length=200)),
+                ('date', models.DateTimeField(auto_now_add=True)),
+                ('receiver', models.OneToOneField(related_name='receive_msgs', to='lab.LabMember')),
+                ('reply_to', models.ForeignKey(to='lab.MessageBoard')),
+                ('sender', models.ForeignKey(related_name='send_msgs', to='lab.LabMember')),
             ],
+        ),
+        migrations.CreateModel(
+            name='notice',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('title', models.CharField(max_length=20)),
+                ('content', models.TextField()),
+                ('labmember', models.ForeignKey(to='lab.LabMember')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='ProjectTeam',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=128)),
+                ('introduction', models.TextField(blank=True)),
+                ('mem_status', models.BooleanField(default=True)),
+                ('pro_status', models.BooleanField(default=False)),
+                ('plan', models.IntegerField(default=0)),
+                ('date', models.DateTimeField(auto_now_add=True)),
+                ('show', models.BooleanField(default=True)),
+                ('leader', models.ForeignKey(related_name='lead_project', to='lab.LabMember')),
+                ('members', models.ManyToManyField(related_name='join_project', to='lab.LabMember')),
+            ],
+            options={
+                'ordering': ['-date'],
+            },
+        ),
+        migrations.AddField(
+            model_name='findingapplication',
+            name='project_team',
+            field=models.ForeignKey(to='lab.ProjectTeam'),
         ),
     ]

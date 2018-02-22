@@ -36,12 +36,26 @@ class LabMember(models.Model):
             teachers.save()
 
     @property
-    def teacher(self):
+    def is_teacher(self):
         # 是否是老师，如果不是则为学生,默认为学生
         group = self.user.groups.first()
-        if group.name == 'teacher':
-            return False
-        return True
+        if group.name == 'teacher' or group.name == 'admin':
+            return True
+        return False
+
+    @property
+    def is_student(self):
+        group = self.user.groups.first()
+        if group.name == 'student':
+            return True
+        return False
+
+    @property
+    def is_admin(self):
+        group = self.user.groups.first()
+        if group.name == 'admin':
+            return True
+        return False
 
     def __uncode__(self):
         return self.name
@@ -65,17 +79,30 @@ class ProjectTeam(models.Model):
     '''项目团队'''
     name = models.CharField(max_length=128)
     introduction = models.TextField(blank=True)
-    members = models.ManyToManyField(LabMember)
+    members = models.ManyToManyField(LabMember,related_name='join_project')#反查参加的项目
+    mem_status = models.BooleanField(default=True)#是否可以继续添加人员
+    pro_status = models.BooleanField(default=False)#项目是否完成
+    plan = models.IntegerField(default=0) #进度
+    date = models.DateTimeField(auto_now_add=True)
+    leader = models.ForeignKey(LabMember,related_name='lead_project')#项目负责人,反查负责的项目
+    show = models.BooleanField(default=True)#是否显示，删除直接讲这个字段改为false
+
+    class Meta:
+        ordering = ['-date']
+
+    @property
+    def member_num(self):
+        return self.members.count() #返回团队的总人数
 
     @property
     def teachers(self):
         labmembers = self.members.all()
-        return [labmember for labmember in labmembers if labmember.teacher==True]
+        return [labmember for labmember in labmembers if labmember.is_teacher == True]
 
     @property
     def students(self):
         labmembers = self.members.all()
-        return [labmember for labmember in labmembers if labmember.teacher==False]
+        return [labmember for labmember in labmembers if labmember.is_student == True]
 
     @property
     def money(self):
@@ -84,6 +111,7 @@ class ProjectTeam(models.Model):
 
     def __unicode__(self):
         return self.name
+
 
 class FindingApplication(models.Model):
     '''资金申请'''

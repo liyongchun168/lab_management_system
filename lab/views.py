@@ -1,13 +1,13 @@
 # encoding:  utf-8
 from django.shortcuts import render
-from .forms import Login_form,Register_form,GoodAddForm,GoodEditForm
+from .forms import Login_form,Register_form,GoodAddForm,GoodEditForm,ProjectPulishForm
 from django.http import HttpResponse,HttpResponseRedirect,HttpResponseForbidden
 from django.contrib.auth.models import User,Group,Permission
 from django.contrib.auth import authenticate,login,logout
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError,models
-from .models import LabMember,Good
+from .models import LabMember,Good,ProjectTeam
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 from django.contrib.auth.decorators import permission_required,login_required
 
@@ -112,6 +112,29 @@ def edit_money(request):
     pass
 def del_money(request):
     pass
+
+def project_pulish(request):
+    if request.method == 'POST':
+        form = ProjectPulishForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('project-list'))
+    else:
+        form =ProjectPulishForm()
+    return render(request,'project_pulish.html',{'form':form})
+
+def project_list(request):
+    plist = ProjectTeam.objects.all()
+    per_page = 5
+    paginator = Paginator(plist,per_page)
+    page = request.GET.get('page')
+    try:
+        projects = paginator.page(page)
+    except PageNotAnInteger:
+        projects = paginator.page(1)
+    except EmptyPage:
+        projects = paginator.page(paginator.num_pages)
+    return render(request,'project-list.html',{'projects':projects})
 
 def test(request):
     return HttpResponseForbidden('403禁止')

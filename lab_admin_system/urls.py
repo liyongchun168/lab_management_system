@@ -28,6 +28,8 @@ urlpatterns = [
     url(r'money/$','lab.views.money',name='money'),
     url(r'money/edit/(\d+)','lab.views.edit_money',name='edit_money'),
     url(r'money/del/(\d+)','lab.views.del_money',name='del_money'),
+    url(r'^project/list/$','lab.views.project_list',name='project-list'),
+    url(r'^project/publish/$','lab.views.project_pulish',name='project-publish'),
     # url(r'^person/$','lab.views.person',name='person'),
     # url(r'^good/(\d*)/$','lab.views.good_detail',name='good_detail')
 
