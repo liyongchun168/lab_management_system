@@ -1,6 +1,6 @@
 # encoding:  utf-8
 from django.shortcuts import render
-from .forms import Login_form,Register_form,GoodAddForm,GoodEditForm,ProjectPulishForm
+from .forms import Login_form,Register_form,GoodAddForm,GoodEditForm,ProjectPulishForm,UserEditForm
 from django.http import HttpResponse,HttpResponseRedirect,HttpResponseForbidden
 from django.contrib.auth.models import User,Group,Permission
 from django.contrib.auth import authenticate,login,logout
@@ -137,5 +137,19 @@ def project_list(request):
     return render(request,'project-list.html',{'projects':projects})
 
 def user_view(request,user_id):
+    user = LabMember.objects.get(id = user_id)
+    return render(request,'user_page.html',{'user_info':user})
 
-    return render(request,'user_page.html')
+def user_edit(request,user_id):
+    if request.method == 'POST':
+        user_form = UserEditForm(request.POST)
+        if user_form.is_valid():
+            user_form.save()
+            return HttpResponseRedirect(reverse('user_view',user_id))
+    else:
+        try:
+            user = LabMember.objects.get(id = user_id)
+        except ObjectDoesNotExist:
+            return HttpResponseForbidden(u'禁止')
+        user_form = UserEditForm(instance=user)
+    return render(request,'user_edit.html',{'user_form':user_form})

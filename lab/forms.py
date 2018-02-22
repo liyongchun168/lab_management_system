@@ -3,7 +3,7 @@
 from django import forms
 from django.forms import ModelForm
 from django.core.validators import RegexValidator
-from .models import Good,ProjectTeam
+from .models import Good,ProjectTeam,LabMember
 
 class Login_form(forms.Form):
     name = forms.CharField(label=u'学号',max_length=128,validators=[RegexValidator(regex='\d{1,30}',message=u'请输入正确的格式')])
@@ -38,3 +38,8 @@ class ProjectPulishForm(ModelForm):
     class Meta:
         model = ProjectTeam
         fields = ('name','introduction','leader')
+
+class UserEditForm(ModelForm):
+    class Meta:
+        model = LabMember
+        fields = ('image','name','email','phone','grade','institute','major','adress')

@@ -6,9 +6,22 @@ from django.db import IntegrityError
 
 class LabMember(models.Model):
     '''实验室成员'''
+    grade_list = (#为grade提供选项
+        ('2014','14级'),
+        ('2015','15级'),
+        ('2016','16级'),
+        ('2017','17级'),
+    )
+
     user = models.OneToOneField(User)#OneToOne关系默认使用关联成员的小写，比如这个反查就是user.labmember
     name = models.CharField(max_length=128)
+    email = models.EmailField(blank=True)
+    phone = models.CharField(blank=True,max_length=20)
+    image = models.ImageField(blank=True,max_length=120)#用户头像
+    grade = models.CharField(blank=True,max_length=4,choices=grade_list)
     institute = models.CharField(default=u'信息与计算机学院',max_length=128)
+    major = models.CharField(blank=True,max_length=20)#专业
+    adress = models.CharField(blank=True,max_length=32)#住址
 
     @staticmethod
     def creat_group():
