@@ -13,7 +13,7 @@ class LabMember(models.Model):
         ('2017','17级'),
     )
 
-    user = models.OneToOneField(User)#OneToOne关系默认使用关联成员的小写，比如这个反查就是user.labmember
+    user = models.OneToOneField(User,related_name='lab')#OneToOne关系默认使用关联成员的小写，比如这个反查就是user.labmember
     name = models.CharField(max_length=128)
     email = models.EmailField(blank=True)
     phone = models.CharField(blank=True,max_length=20)
@@ -69,6 +69,11 @@ class LabMember(models.Model):
         if group.name == 'admin':
             return True
         return False
+
+    def __iter__(self):
+        fields = [self.name,self.email,self.phone,self.grade,self.institute,self.major,self.adress]
+        for i in fields:
+            yield i
 
     def __unicode__(self):
         return self.name

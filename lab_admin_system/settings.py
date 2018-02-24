@@ -1,3 +1,4 @@
+# encoding: utf-8
 """
 Django settings for lab_admin_system project.
 
@@ -39,6 +40,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'lab',
+    'bootstrap3',
+    'django_extensions',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -116,3 +119,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 LOGIN_URL = '/login/'
+
+SHELL_PLUS = "ipython" #为django_extensions提供默认shell工具

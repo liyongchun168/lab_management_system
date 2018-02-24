@@ -1,7 +1,7 @@
 # encoding:  utf-8
 from django.shortcuts import render
 from .forms import Login_form,Register_form,GoodAddForm,GoodEditForm,ProjectPulishForm,UserEditForm
-from django.http import HttpResponse,HttpResponseRedirect,HttpResponseForbidden
+from django.http import HttpResponse,HttpResponseRedirect,HttpResponseForbidden,HttpResponseNotFound
 from django.contrib.auth.models import User,Group,Permission
 from django.contrib.auth import authenticate,login,logout
 from django.core.urlresolvers import reverse
@@ -137,19 +137,32 @@ def project_list(request):
     return render(request,'project-list.html',{'projects':projects})
 
 def user_view(request,user_id):
-    user = LabMember.objects.get(id = user_id)
-    return render(request,'user_page.html',{'user_info':user})
+    try:
+        lab_user = LabMember.objects.get(id=user_id)
+    except ObjectDoesNotExist:
+        return HttpResponseNotFound('404')
+    return render(request,'user_page.html', {'lab_user':lab_user})
 
 def user_edit(request,user_id):
+
+    try:
+        user = LabMember.objects.get(id=user_id)
+    except ObjectDoesNotExist:
+        return HttpResponseNotFound('404')
+    if request.user.lab.id != user.id:#如果修改的用户不是当前用户就返回404
+        return HttpResponseNotFound('404没有找到')
     if request.method == 'POST':
-        user_form = UserEditForm(request.POST)
+        user_form = UserEditForm(request.POST,instance=user)
         if user_form.is_valid():
             user_form.save()
-            return HttpResponseRedirect(reverse('user_view',user_id))
+            return HttpResponseRedirect(reverse('user_view',args=(user_id,)))
     else:
-        try:
-            user = LabMember.objects.get(id = user_id)
-        except ObjectDoesNotExist:
-            return HttpResponseForbidden(u'禁止')
         user_form = UserEditForm(instance=user)
     return render(request,'user_edit.html',{'user_form':user_form})
+
+def user(request):
+    pass
+
+def user_add(request):
+    user_list = LabMember.objects.all()
+    return render(request,'user-list.html',{'user_list':user_list})
