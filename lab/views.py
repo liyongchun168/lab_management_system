@@ -1,6 +1,6 @@
 # encoding:  utf-8
 from django.shortcuts import render
-from .forms import Login_form,Register_form,GoodAddForm,GoodEditForm,ProjectPulishForm,UserEditForm
+from .forms import Login_form,Register_form,GoodAddForm,GoodEditForm,ProjectPulishForm,UserEditForm,UserAddForm
 from django.http import HttpResponse,HttpResponseRedirect,HttpResponseForbidden,HttpResponseNotFound
 from django.contrib.auth.models import User,Group,Permission
 from django.contrib.auth import authenticate,login,logout
@@ -160,9 +160,20 @@ def user_edit(request,user_id):
         user_form = UserEditForm(instance=user)
     return render(request,'user_edit.html',{'user_form':user_form})
 
-def user(request):
-    pass
-
 def user_add(request):
+    if request.method == 'POST':
+        form = UserAddForm(request.POST)
+        if form.is_valid():
+            school_num = form.cleaned_data['school_num']
+            name = form.cleaned_data['name']
+            user = User.objects.create(username=school_num,password=school_num)
+            lab = LabMember(user=user,name=name)
+            lab.save()
+            return HttpResponseRedirect(reverse('user-list'))
+    else:
+        form = UserAddForm()
+    return render(request,'user_add.html',{'form':form})
+
+def user(request):
     user_list = LabMember.objects.all()
     return render(request,'user-list.html',{'user_list':user_list})

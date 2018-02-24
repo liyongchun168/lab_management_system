@@ -42,4 +42,12 @@ class ProjectPulishForm(ModelForm):
 class UserEditForm(ModelForm):
     class Meta:
         model = LabMember
-        fields = ('image','name','email','phone','grade','institute','major','adress')
+        fields = ['image','name','email','phone','grade','institute','major','adress']
+
+class UserAddForm(forms.Form):
+    # user = forms.CharField(max_length=128,validators=[RegexValidator(regex='\d{1,30}',message=u'请输入正确的格式')])
+    # class Meta:
+    #     model = LabMember
+    #     fields = ['image','name','email','phone','grade','institute','major','adress']
+    school_num = forms.CharField(label=u'学号',max_length=128, validators=[RegexValidator(regex='\d{1,30}', message=u'请输入正确的格式')])
+    name = forms.CharField(max_length=30)

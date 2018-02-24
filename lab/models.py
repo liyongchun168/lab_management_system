@@ -14,7 +14,7 @@ class LabMember(models.Model):
     )
 
     user = models.OneToOneField(User,related_name='lab')#OneToOne关系默认使用关联成员的小写，比如这个反查就是user.labmember
-    name = models.CharField(max_length=128)
+    name = models.CharField(max_length=30)
     email = models.EmailField(blank=True)
     phone = models.CharField(blank=True,max_length=20)
     image = models.ImageField(blank=True,max_length=120)#用户头像
@@ -22,6 +22,7 @@ class LabMember(models.Model):
     institute = models.CharField(default=u'信息与计算机学院',max_length=128)
     major = models.CharField(blank=True,max_length=20)#专业
     adress = models.CharField(blank=True,max_length=32)#住址
+    date = models.DateTimeField(auto_now_add=True)
 
     @staticmethod
     def creat_group():
