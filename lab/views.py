@@ -60,6 +60,66 @@ def login_view(request):
 #     else:
 #         register_form = Register_form()
 #     return render(request,'registration/register.html',{'register_form':register_form,'error_msg':error_msg})
+@login_required
+def user_view(request,user_id):
+    try:
+        lab_user = LabMember.objects.get(id=user_id)
+    except ObjectDoesNotExist:
+        return HttpResponseNotFound('404')
+    return render(request,'user_page.html', {'lab_user':lab_user})
+
+@login_required
+def user_edit(request):
+    #
+    # try:
+    #     user = LabMember.objects.get(id=user_id)
+    # except ObjectDoesNotExist:
+    #     return HttpResponseNotFound('404')
+    # if request.user.lab.id != user.id:#如果修改的用户不是当前用户就返回404
+    #     return HttpResponseNotFound('404没有找到')
+    # if request.method == 'POST':
+    #     user_form = UserEditForm(request.POST,instance=user)
+    #     if user_form.is_valid():
+    #         user_form.save()
+    #         return HttpResponseRedirect(reverse('user_view',args=(user_id,)))
+    # else:
+    #     user_form = UserEditForm(instance=user)
+    # return render(request,'user_edit.html',{'user_form':user_form})
+    if request.method == 'POST':
+        user_form = UserEditForm(request.POST,instance=request.user.lab)
+        if user_form.is_valid():
+            user_form.save()
+            return HttpResponseRedirect(reverse('user_view',args=(request.user.lab.id,)))
+    else:
+        user_form = UserEditForm(instance=request.user.lab)
+    return render(request,'user_edit.html',{'user_form':user_form})
+
+@login_required
+def user_add(request):
+    if request.method == 'POST':
+        form = UserAddForm(request.POST)
+        if form.is_valid():
+            school_num = form.cleaned_data['school_num']
+            name = form.cleaned_data['name']
+            user = User.objects.create_user(username=school_num,password=school_num)
+            lab = LabMember(user=user,name=name)
+            lab.save()
+            return HttpResponseRedirect(reverse('user-list'))
+    else:
+        form = UserAddForm()
+    return render(request,'user_add.html',{'form':form})
+
+@login_required
+def user_del(request,d):
+    user_id = LabMember.objects.get(id = d).user_id
+    LabMember.objects.get(id = d).delete()
+    User.objects.get(id = user_id).delete()
+    return HttpResponseRedirect(reverse('user-list'))
+
+@login_required
+def user_list(request):
+    lab_list = LabMember.objects.all()
+    return render(request,'user-list.html',{'lab_list':lab_list})
 
 @login_required
 def home_page(request):
@@ -87,7 +147,7 @@ def good_view(request):
 @login_required
 @permission_required('lab.delete_good',raise_exception=True)
 def del_good(request,id):
-    Good.objects.get(id = int(id)).delete()
+    Good.objects.get(id).delete()
     return HttpResponseRedirect(reverse('good'))
 
 @login_required
@@ -137,52 +197,3 @@ def project_list(request):
         projects = paginator.page(paginator.num_pages)
     return render(request,'project-list.html',{'projects':projects})
 
-def user_view(request,user_id):
-    try:
-        lab_user = LabMember.objects.get(id=user_id)
-    except ObjectDoesNotExist:
-        return HttpResponseNotFound('404')
-    return render(request,'user_page.html', {'lab_user':lab_user})
-
-def user_edit(request):
-    #
-    # try:
-    #     user = LabMember.objects.get(id=user_id)
-    # except ObjectDoesNotExist:
-    #     return HttpResponseNotFound('404')
-    # if request.user.lab.id != user.id:#如果修改的用户不是当前用户就返回404
-    #     return HttpResponseNotFound('404没有找到')
-    # if request.method == 'POST':
-    #     user_form = UserEditForm(request.POST,instance=user)
-    #     if user_form.is_valid():
-    #         user_form.save()
-    #         return HttpResponseRedirect(reverse('user_view',args=(user_id,)))
-    # else:
-    #     user_form = UserEditForm(instance=user)
-    # return render(request,'user_edit.html',{'user_form':user_form})
-    if request.method == 'POST':
-        user_form = UserEditForm(request.POST,instance=request.user.lab)
-        if user_form.is_valid():
-            user_form.save()
-            return HttpResponseRedirect(reverse('user_view',args=(request.user.lab.id,)))
-    else:
-        user_form = UserEditForm(instance=request.user.lab)
-    return render(request,'user_edit.html',{'user_form':user_form})
-
-def user_add(request):
-    if request.method == 'POST':
-        form = UserAddForm(request.POST)
-        if form.is_valid():
-            school_num = form.cleaned_data['school_num']
-            name = form.cleaned_data['name']
-            user = User.objects.create_user(username=school_num,password=school_num)
-            lab = LabMember(user=user,name=name)
-            lab.save()
-            return HttpResponseRedirect(reverse('user-list'))
-    else:
-        form = UserAddForm()
-    return render(request,'user_add.html',{'form':form})
-
-def user(request):
-    user_list = LabMember.objects.all()
-    return render(request,'user-list.html',{'user_list':user_list})
