@@ -99,29 +99,29 @@ def user_edit(request):
         user_form = UserEditForm(instance=request.user.lab)
     return render(request,'user_edit.html',{'user_form':user_form})
 
-# @login_required
-# def user_add(request):
-#     if request.method == 'POST':
-#         form = UserAddForm(request.POST)
-#         if form.is_valid():
-#             school_num = form.cleaned_data['school_num']
-#             name = form.cleaned_data['name']
-#             role = form.cleaned_data['role']
-#             user = User.objects.create_user(username=school_num,password=school_num)
-#             teacher = Group.objects.get(name='teacher')
-#             student = Group.objects.get(name='student')
-#             if role==1:
-#                 user.groups.add(teacher)
-#             if role==2:
-#                 user.groups.add(student)
-#             user.save()
-#             lab = LabMember(user=user,name=name,role=role)
-#             lab.save()
-#
-#             return HttpResponseRedirect(reverse('user-list'))
-#     else:
-#         form = UserAddForm()
-#     return render(request,'user_add.html',{'form':form})
+@login_required
+def user_add(request):
+    if request.method == 'POST':
+        form = UserAddForm(request.POST)
+        if form.is_valid():
+            school_num = form.cleaned_data['school_num']
+            name = form.cleaned_data['name']
+            role = form.cleaned_data['role']
+            user = User.objects.create_user(username=school_num,password=school_num)
+            teacher = Group.objects.get(name='teacher')
+            student = Group.objects.get(name='student')
+            lab = LabMember(user=user,name=name,role=role)
+            lab.save()
+            if lab.role==1:
+                user.groups.add(teacher)
+            if lab.role==2:
+                user.groups.add(student)
+            user.save()
+
+            return HttpResponseRedirect(reverse('user-list'))
+    else:
+        form = UserAddForm()
+    return render(request,'user_add.html',{'form':form})
 
 @login_required
 @permission_required('lab.delete_labmember',raise_exception=True)
@@ -181,7 +181,7 @@ def good_view(request):
 @login_required
 @permission_required('lab.delete_good',raise_exception=True)
 def del_good(request,id):
-    Good.objects.get(id).delete()
+    Good.objects.get(id = id).delete()
     return HttpResponseRedirect(reverse('good'))
 
 @login_required

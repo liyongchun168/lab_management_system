@@ -57,4 +57,4 @@ class UserAddForm(forms.Form):
 
     school_num = forms.CharField(label=u'学号',max_length=128, validators=[RegexValidator(regex='\d{1,30}', message=u'请输入正确的格式')])
     name = forms.CharField(label=u'姓名',max_length=7)
-    role = forms.ChoiceField(label=u'角色',choices=role_list)
+    role = forms.TypedChoiceField(label=u'角色',choices=role_list,coerce=int)
