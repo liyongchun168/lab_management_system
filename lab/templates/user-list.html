@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% block title %}
+用户列表
+{% endblock %}
+
+{% block content %}
+    {% for lab in lab_list %}
+        <li><a href="{% url 'user_view' lab.id %}">{{lab.name }}</a></li>
+    {% endfor %}
+{% endblock %}

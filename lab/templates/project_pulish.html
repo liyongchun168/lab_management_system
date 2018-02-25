@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}
+发布项目
+{% endblock %}
+
+{% block content %}
+    <form action="" method="post" role="form" class="form">
+        {% csrf_token %}
+{#        <div class="form-group">#}
+{#            <label for="name">项目名称</label>#}
+{#            <input type="text" id="name" name="name" class="form-control" >#}
+{#        </div>#}
+{#        <div class="form-group">#}
+{#            <label for="introduction">项目介绍</label>#}
+{#            <input type="text" id="introduction" name="introduction" class="form-control" >#}
+{#        </div>#}
+        {{ form.as_p }}
+            <button class="btn btn-default" type="submit">发布项目！</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% block title %}
+修改用户信息
+{% endblock %}
+
+{% block content %}
+{#<div class="">#}
+    <div class="row">
+        <div class="col-md-4">
+                <form action="" method="post" role="form">
+                    <table>
+                        {% bootstrap_form user_form %}
+                    </table>
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">提交</button>
+                </form>
+        </div>
+    </div>
+
+{#</div>#}
+{% endblock %}

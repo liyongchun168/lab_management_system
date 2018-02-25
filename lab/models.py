@@ -14,7 +14,6 @@ class LabMember(models.Model):
     )
 
     role_list = {
-        (0,u'管理员'),
         (1,u'老师'),
         (2,u'学生'),
 
@@ -22,7 +21,7 @@ class LabMember(models.Model):
 
     user = models.OneToOneField(User,related_name='lab')#OneToOne关系默认使用关联成员的小写，比如这个反查默认user.labmember，我改为lab
     role = models.IntegerField(choices=role_list)#角色：管理员，老师，学生
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=7)
     email = models.EmailField(blank=True)
     phone = models.CharField(blank=True,max_length=20)
     image = models.ImageField(blank=True,max_length=120)#用户头像

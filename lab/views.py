@@ -30,7 +30,6 @@ def login_view(request):
     else:
         login_form = Login_form()
     return render(request,'registration/login.html',{'login_form':login_form,'error_msg':error_msg})
-
 # def register(request):
 #     error_msg = ''
 #     if request.method=='POST':
@@ -60,6 +59,12 @@ def login_view(request):
 #     else:
 #         register_form = Register_form()
 #     return render(request,'registration/register.html',{'register_form':register_form,'error_msg':error_msg})
+
+@login_required
+def home_page(request):
+    return render(request, 'home_page.html')
+
+#用户模块
 @login_required
 def user_view(request,user_id):
     try:
@@ -94,22 +99,32 @@ def user_edit(request):
         user_form = UserEditForm(instance=request.user.lab)
     return render(request,'user_edit.html',{'user_form':user_form})
 
-@login_required
-def user_add(request):
-    if request.method == 'POST':
-        form = UserAddForm(request.POST)
-        if form.is_valid():
-            school_num = form.cleaned_data['school_num']
-            name = form.cleaned_data['name']
-            user = User.objects.create_user(username=school_num,password=school_num)
-            lab = LabMember(user=user,name=name)
-            lab.save()
-            return HttpResponseRedirect(reverse('user-list'))
-    else:
-        form = UserAddForm()
-    return render(request,'user_add.html',{'form':form})
+# @login_required
+# def user_add(request):
+#     if request.method == 'POST':
+#         form = UserAddForm(request.POST)
+#         if form.is_valid():
+#             school_num = form.cleaned_data['school_num']
+#             name = form.cleaned_data['name']
+#             role = form.cleaned_data['role']
+#             user = User.objects.create_user(username=school_num,password=school_num)
+#             teacher = Group.objects.get(name='teacher')
+#             student = Group.objects.get(name='student')
+#             if role==1:
+#                 user.groups.add(teacher)
+#             if role==2:
+#                 user.groups.add(student)
+#             user.save()
+#             lab = LabMember(user=user,name=name,role=role)
+#             lab.save()
+#
+#             return HttpResponseRedirect(reverse('user-list'))
+#     else:
+#         form = UserAddForm()
+#     return render(request,'user_add.html',{'form':form})
 
 @login_required
+@permission_required('lab.delete_labmember',raise_exception=True)
 def user_del(request,d):
     user_id = LabMember.objects.get(id = d).user_id
     LabMember.objects.get(id = d).delete()
@@ -121,9 +136,28 @@ def user_list(request):
     lab_list = LabMember.objects.all()
     return render(request,'user-list.html',{'lab_list':lab_list})
 
-@login_required
-def home_page(request):
-    return render(request, 'home_page.html')
+def project_pulish(request):
+    if request.method == 'POST':
+        form = ProjectPulishForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('project-list'))
+    else:
+        form =ProjectPulishForm()
+    return render(request,'project_pulish.html',{'form':form})
+
+def project_list(request):
+    plist = ProjectTeam.objects.all()
+    per_page = 5
+    paginator = Paginator(plist,per_page)
+    page = request.GET.get('page')
+    try:
+        projects = paginator.page(page)
+    except PageNotAnInteger:
+        projects = paginator.page(1)
+    except EmptyPage:
+        projects = paginator.page(paginator.num_pages)
+    return render(request,'project-list.html',{'projects':projects})
 
 @login_required
 def good_view(request):
@@ -174,26 +208,4 @@ def edit_money(request):
 def del_money(request):
     pass
 
-def project_pulish(request):
-    if request.method == 'POST':
-        form = ProjectPulishForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('project-list'))
-    else:
-        form =ProjectPulishForm()
-    return render(request,'project_pulish.html',{'form':form})
-
-def project_list(request):
-    plist = ProjectTeam.objects.all()
-    per_page = 5
-    paginator = Paginator(plist,per_page)
-    page = request.GET.get('page')
-    try:
-        projects = paginator.page(page)
-    except PageNotAnInteger:
-        projects = paginator.page(1)
-    except EmptyPage:
-        projects = paginator.page(paginator.num_pages)
-    return render(request,'project-list.html',{'projects':projects})
 
