@@ -31,35 +31,35 @@ def login_view(request):
         login_form = Login_form()
     return render(request,'registration/login.html',{'login_form':login_form,'error_msg':error_msg})
 
-def register(request):
-    error_msg = ''
-    if request.method=='POST':
-        try:
-            LabMember.creat_group()
-        except IntegrityError:
-            pass
-        register_form = Register_form(request.POST)
-        if register_form.is_valid():
-            username = register_form.cleaned_data['name']
-            password = register_form.cleaned_data['password']
-            user_group = register_form.cleaned_data['user_group']
-            try:
-                user = User.objects.create_user(username=username,password=password)
-                user.save()
-                try:
-                    group = Group.objects.get(name=user_group)
-                    user.groups.add(group)
-                    user.save()
-                    return HttpResponseRedirect(reverse('login'))
-                except Exception:
-                    error_msg = u'用户角色设置错误'
-            except IntegrityError:
-                error_msg = u'该账号已被注册'
-            except Exception:
-                error_msg = u'出现内部错误,请稍后再试'
-    else:
-        register_form = Register_form()
-    return render(request,'registration/register.html',{'register_form':register_form,'error_msg':error_msg})
+# def register(request):
+#     error_msg = ''
+#     if request.method=='POST':
+#         try:
+#             LabMember.creat_group()
+#         except IntegrityError:
+#             pass
+#         register_form = Register_form(request.POST)
+#         if register_form.is_valid():
+#             username = register_form.cleaned_data['name']
+#             password = register_form.cleaned_data['password']
+#             user_group = register_form.cleaned_data['user_group']
+#             try:
+#                 user = User.objects.create_user(username=username,password=password)
+#                 user.save()
+#                 try:
+#                     group = Group.objects.get(name=user_group)
+#                     user.groups.add(group)
+#                     user.save()
+#                     return HttpResponseRedirect(reverse('login'))
+#                 except Exception:
+#                     error_msg = u'用户角色设置错误'
+#             except IntegrityError:
+#                 error_msg = u'该账号已被注册'
+#             except Exception:
+#                 error_msg = u'出现内部错误,请稍后再试'
+#     else:
+#         register_form = Register_form()
+#     return render(request,'registration/register.html',{'register_form':register_form,'error_msg':error_msg})
 
 @login_required
 def home_page(request):
