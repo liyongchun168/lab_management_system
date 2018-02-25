@@ -7,10 +7,10 @@ from django.db import IntegrityError
 class LabMember(models.Model):
     '''实验室成员'''
     grade_list = (#为grade提供选项
-        ('2014','14级'),
-        ('2015','15级'),
-        ('2016','16级'),
-        ('2017','17级'),
+        ('2014',u'14级'),
+        ('2015',u'15级'),
+        ('2016',u'16级'),
+        ('2017',u'17级'),
     )
 
     role_list = {
@@ -20,7 +20,7 @@ class LabMember(models.Model):
 
     }
 
-    user = models.OneToOneField(User,related_name='lab')#OneToOne关系默认使用关联成员的小写，比如这个反查就是user.labmember
+    user = models.OneToOneField(User,related_name='lab')#OneToOne关系默认使用关联成员的小写，比如这个反查默认user.labmember，我改为lab
     role = models.IntegerField(choices=role_list)#角色：管理员，老师，学生
     name = models.CharField(max_length=30)
     email = models.EmailField(blank=True)
@@ -32,55 +32,55 @@ class LabMember(models.Model):
     adress = models.CharField(blank=True,max_length=32)#住址
     date = models.DateTimeField(auto_now_add=True)
 
-    @staticmethod
-    def creat_group():
-        try:
-            teacher_group = Group.objects.create(name='teacher')
-            teacher_group.save()
-        except IntegrityError:
-            pass
-        try:
-            student_group = Group.objects.create(name='student')
-            student_group.save()
-        except IntegrityError:
-            pass
-        try:
-            admin_group = Group.objects.create(name='admin')
-            admin_group.save()
-        except IntegrityError:
-            pass
-    @staticmethod
-    def assign_permissions():
-        permissions = Permission.objects.filter(codename__endswith='good')
-        teachers = Group.objects.get(name='teacher')
-        for p in permissions:
-            teachers.permissions.add(p)
-            teachers.save()
-
-    @property
-    def is_teacher(self):
-        # 是否是老师，如果不是则为学生,默认为学生
-        group = self.user.groups.first()
-        if group.name == 'teacher' or group.name == 'admin':
-            return True
-        return False
-
-    @property
-    def is_student(self):
-        group = self.user.groups.first()
-        if group.name == 'student':
-            return True
-        return False
-
-    @property
-    def is_admin(self):
-        group = self.user.groups.first()
-        if group.name == 'admin':
-            return True
-        return False
+    # @staticmethod
+    # def creat_group():
+    #     try:
+    #         teacher_group = Group.objects.create(name='teacher')
+    #         teacher_group.save()
+    #     except IntegrityError:
+    #         pass
+    #     try:
+    #         student_group = Group.objects.create(name='student')
+    #         student_group.save()
+    #     except IntegrityError:
+    #         pass
+    #     try:
+    #         admin_group = Group.objects.create(name='admin')
+    #         admin_group.save()
+    #     except IntegrityError:
+    #         pass
+    # @staticmethod
+    # def assign_permissions():
+    #     permissions = Permission.objects.filter(codename__endswith='good')
+    #     teachers = Group.objects.get(name='teacher')
+    #     for p in permissions:
+    #         teachers.permissions.add(p)
+    #         teachers.save()
+    #
+    # @property
+    # def is_teacher(self):
+    #     # 是否是老师，如果不是则为学生,默认为学生
+    #     group = self.user.groups.first()
+    #     if group.name == 'teacher' or group.name == 'admin':
+    #         return True
+    #     return False
+    #
+    # @property
+    # def is_student(self):
+    #     group = self.user.groups.first()
+    #     if group.name == 'student':
+    #         return True
+    #     return False
+    #
+    # @property
+    # def is_admin(self):
+    #     group = self.user.groups.first()
+    #     if group.name == 'admin':
+    #         return True
+    #     return False
 
     def __iter__(self):
-        fields = [self.name,self.email,self.phone,self.grade,self.institute,self.major,self.adress]
+        fields = [self.name,self.role,self.email,self.phone,self.grade,self.institute,self.major,self.adress]
         for i in fields:
             yield i
 
