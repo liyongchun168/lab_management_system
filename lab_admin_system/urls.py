@@ -31,7 +31,7 @@ urlpatterns = [
     url(r'^project/list/$','lab.views.project_list',name='project-list'),
     url(r'^project/publish/$','lab.views.project_pulish',name='project-publish'),
     url(r'^user/(\d+)','lab.views.user_view',name='user_view'),
-    url(r'^user/edit/(\d+)','lab.views.user_edit',name='user-edit'),
+    url(r'^user/edit/$','lab.views.user_edit',name='user-edit'),
     url(r'^user/add/$', 'lab.views.user_add', name='user-add'),
     url(r'^user/$','lab.views.user',name='user-list'),
 

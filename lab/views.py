@@ -144,21 +144,29 @@ def user_view(request,user_id):
         return HttpResponseNotFound('404')
     return render(request,'user_page.html', {'lab_user':lab_user})
 
-def user_edit(request,user_id):
-
-    try:
-        user = LabMember.objects.get(id=user_id)
-    except ObjectDoesNotExist:
-        return HttpResponseNotFound('404')
-    if request.user.lab.id != user.id:#如果修改的用户不是当前用户就返回404
-        return HttpResponseNotFound('404没有找到')
+def user_edit(request):
+    #
+    # try:
+    #     user = LabMember.objects.get(id=user_id)
+    # except ObjectDoesNotExist:
+    #     return HttpResponseNotFound('404')
+    # if request.user.lab.id != user.id:#如果修改的用户不是当前用户就返回404
+    #     return HttpResponseNotFound('404没有找到')
+    # if request.method == 'POST':
+    #     user_form = UserEditForm(request.POST,instance=user)
+    #     if user_form.is_valid():
+    #         user_form.save()
+    #         return HttpResponseRedirect(reverse('user_view',args=(user_id,)))
+    # else:
+    #     user_form = UserEditForm(instance=user)
+    # return render(request,'user_edit.html',{'user_form':user_form})
     if request.method == 'POST':
-        user_form = UserEditForm(request.POST,instance=user)
+        user_form = UserEditForm(request.POST,instance=request.user.lab)
         if user_form.is_valid():
             user_form.save()
-            return HttpResponseRedirect(reverse('user_view',args=(user_id,)))
+            return HttpResponseRedirect(reverse('user_view',args=(request.user.lab.id,)))
     else:
-        user_form = UserEditForm(instance=user)
+        user_form = UserEditForm(instance=request.user.lab)
     return render(request,'user_edit.html',{'user_form':user_form})
 
 def user_add(request):
