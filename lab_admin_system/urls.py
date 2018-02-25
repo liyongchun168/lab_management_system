@@ -33,7 +33,7 @@ urlpatterns = [
     url(r'^user/(\d+)','lab.views.user_view',name='user_view'),
     url(r'^user/edit/(\d+)','lab.views.user_edit',name='user-edit'),
     url(r'^user/add/$', 'lab.views.user_add', name='user-add'),
-    url('r^user/$','lab.views.user',name='user-list'),
+    url(r'^user/$','lab.views.user',name='user-list'),
 
     # url(r'^person/$','lab.views.person',name='person'),
     # url(r'^good/(\d*)/$','lab.views.good_detail',name='good_detail')

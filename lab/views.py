@@ -61,6 +61,7 @@ def register(request):
         register_form = Register_form()
     return render(request,'registration/register.html',{'register_form':register_form,'error_msg':error_msg})
 
+@login_required
 def home_page(request):
     return render(request, 'home_page.html')
 
@@ -166,7 +167,7 @@ def user_add(request):
         if form.is_valid():
             school_num = form.cleaned_data['school_num']
             name = form.cleaned_data['name']
-            user = User.objects.create(username=school_num,password=school_num)
+            user = User.objects.create_user(username=school_num,password=school_num)
             lab = LabMember(user=user,name=name)
             lab.save()
             return HttpResponseRedirect(reverse('user-list'))

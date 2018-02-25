@@ -13,7 +13,15 @@ class LabMember(models.Model):
         ('2017','17级'),
     )
 
+    role_list = {
+        (0,u'管理员'),
+        (1,u'老师'),
+        (2,u'学生'),
+
+    }
+
     user = models.OneToOneField(User,related_name='lab')#OneToOne关系默认使用关联成员的小写，比如这个反查就是user.labmember
+    role = models.IntegerField(choices=role_list)#角色：管理员，老师，学生
     name = models.CharField(max_length=30)
     email = models.EmailField(blank=True)
     phone = models.CharField(blank=True,max_length=20)
