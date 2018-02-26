@@ -41,7 +41,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'lab',
     'bootstrap3',
-    'django_extensions',
+    'lab_user',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -60,8 +60,8 @@ ROOT_URLCONF = 'lab_admin_system.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
+        'DIRS': [os.path.join(BASE_DIR, 'templates') ],
+        'APP_DIRS': False,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -116,8 +116,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL='/static/'#这个是静态服务器查找的目录，在模板中使用static标签
+STATICFILES_DIRS=(BASE_DIR,'static')#这个是静态文件的公共目录
 
 LOGIN_URL = '/login/'
 
-SHELL_PLUS = "ipython" #为django_extensions提供默认shell工具
+# SHELL_PLUS = "ipython" #为django_extensions提供默认shell工具

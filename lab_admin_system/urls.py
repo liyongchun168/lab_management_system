@@ -19,7 +19,7 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$','lab.views.home_page', name='homepage'),
-    url(r'^login/$','lab.views.login_view',name='login'),
+    url(r'^login/$','lab_user.views.login_view',name='login'),
     url(r'^logout/$','django.contrib.auth.views.logout',{'next_page':'/login/'},name='logout'),
     # url(r'^register/$','lab.views.register',name='register'),
     url(r'^good/$','lab.views.good_view',name='good'),
@@ -30,11 +30,11 @@ urlpatterns = [
     url(r'money/del/(\d+)','lab.views.del_money',name='del_money'),
     url(r'^project/list/$','lab.views.project_list',name='project-list'),
     url(r'^project/publish/$','lab.views.project_pulish',name='project-publish'),
-    url(r'^user/(\d+)','lab.views.user_view',name='user_view'),
-    url(r'^user/edit/$','lab.views.user_edit',name='user-edit'),
-    url(r'^user/add/$', 'lab.views.user_add', name='user-add'),
-    url(r'^user/del/(\d+)','lab.views.user_del',name='user-del'),
-    url(r'^user/$', 'lab.views.user_list', name='user-list'),
+    url(r'^user/(\d+)','lab_user.views.user_view', name='user-view'),
+    url(r'^user/edit/$','lab_user.views.user_edit',name='user-edit'),
+    url(r'^user/add/$', 'lab_user.views.user_add', name='user-add'),
+    url(r'^user/del/(\d+)','lab_user.views.user_del',name='user-del'),
+    url(r'^user/$', 'lab_user.views.user_list', name='user-list'),
 
     # url(r'^person/$','lab.views.person',name='person'),
     # url(r'^good/(\d*)/$','lab.views.good_detail',name='good_detail')
