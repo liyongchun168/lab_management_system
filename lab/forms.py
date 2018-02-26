@@ -2,11 +2,26 @@
 # encoding: utf-8
 from django import forms
 from django.core.validators import RegexValidator
-from .models import Good,ProjectTeam
+from .models import Good,ProjectTeam,User
+# from lab_admin_system.settings import AUTH_USER_MODEL as User
+
+class LoginForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('std_id','password')
+
+class UserEditForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('email','phone','grade','institute','major','adress')
+
+class UserAddForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('std_id','name')
+    def save(self, commit=True):
 
 
-
-from django.utils.translation import ugettext_lazy as _
 class GoodAddForm(forms.ModelForm):
     class Meta:
         model = Good

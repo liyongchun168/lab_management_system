@@ -41,7 +41,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'lab',
     'bootstrap3',
-    'lab_user',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -123,4 +122,4 @@ LOGIN_URL = '/login/'
 
 # SHELL_PLUS = "ipython" #为django_extensions提供默认shell工具
 
-AUTH_USER_MODEL = 'lab_user.User'
+AUTH_USER_MODEL = 'lab.User'
