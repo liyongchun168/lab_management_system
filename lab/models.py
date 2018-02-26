@@ -1,6 +1,7 @@
 # encoding: utf-8
 from django.db import models
-from django.contrib.auth.models import User,Group,Permission
+from django.contrib.auth.models import Group,Permission
+from lab_admin_system import settings
 import django.utils.timezone as timezone
 from django.db import IntegrityError
 
@@ -28,12 +29,12 @@ class ProjectTeam(models.Model):
     '''项目团队'''
     name = models.CharField(max_length=128)
     introduction = models.TextField(blank=True)
-    members = models.ManyToManyField(User, related_name='join_project')#反查参加的项目
+    members = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='join_project')#反查参加的项目
     mem_status = models.BooleanField(default=True)#是否可以继续添加人员
     pro_status = models.BooleanField(default=False)#项目是否完成
     plan = models.IntegerField(default=0) #进度
     date = models.DateTimeField(auto_now_add=True)
-    leader = models.ForeignKey(User, related_name='lead_project')#项目负责人,反查负责的项目
+    leader = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='lead_project')#项目负责人,反查负责的项目
     show = models.BooleanField(default=True)#是否显示，删除直接讲这个字段改为false
 
     class Meta:
@@ -74,7 +75,7 @@ class FindingApplication(models.Model):
 
 class notice(models.Model):
     '''通知'''
-    labmember =models.ForeignKey(User)
+    labmember =models.ForeignKey(settings.AUTH_USER_MODEL)
     title = models.CharField(max_length=20)
     content = models.TextField()
 
@@ -83,8 +84,8 @@ class notice(models.Model):
 
 class MessageBoard(models.Model):
     '''留言板'''
-    sender = models.ForeignKey(User, related_name='send_msgs')#这两个记好了，这是用来反查用的
-    receiver = models.OneToOneField(User, related_name='receive_msgs')
+    sender = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='send_msgs')#这两个记好了，这是用来反查用的
+    receiver = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='receive_msgs')
     reply_to = models.ForeignKey('self')#回复的留言
     content = models.CharField(max_length=200)
     date = models.DateTimeField(auto_now_add=True)#自动添加时间editable=false,blank=true

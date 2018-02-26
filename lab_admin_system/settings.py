@@ -122,3 +122,5 @@ STATICFILES_DIRS=(BASE_DIR,'static')#这个是静态文件的公共目录
 LOGIN_URL = '/login/'
 
 # SHELL_PLUS = "ipython" #为django_extensions提供默认shell工具
+
+AUTH_USER_MODEL = 'lab_user.User'

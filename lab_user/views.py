@@ -102,7 +102,7 @@ def user_add(request):
             school_num = form.cleaned_data['school_num']
             # name = form.cleaned_data['name']
             role = form.cleaned_data['role']
-            user = User.objects.create_user(username=school_num,password=school_num)
+            user = User.objects.create_user(std_id=school_num, password=school_num)
             teacher = Group.objects.get(name='teacher')
             student = Group.objects.get(name='student')
             # lab = Profile(user=user, name=name, role=role)
