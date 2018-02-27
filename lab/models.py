@@ -53,18 +53,37 @@ class User(AbstractBaseUser, PermissionsMixin):
         (2, u'学生'),
     }
 
-    std_id = models.CharField(_('student number'), max_length=30, unique=True,
-        help_text=_('Required. 30 characters or fewer. Letters, digits and '
-                    '@/./+/-/_ only.'),
+    institute_list = {
+
+        (u'农学院',u'农学院'),
+        (u'植物保护学院',u'植物保护学院'),
+        (u'园艺学院',u'园艺学院'),
+        (u'林学与园林学院',u'林学与园林学院'),
+        (u'动物科技学院',u'动物科技学院'),
+        (u'茶与食品科技学院',u'茶与食品科技学院'),
+        (u'理学院',u'理学院'),
+        (u'生命科学学院',u'生命科学学院'),
+        (u'资源与环境学院',u'资源与环境学院'),
+        (u'工学院',u'工学院'),
+        (u'轻纺工程与艺术学院',u'轻纺工程与艺术学院'),
+        (u'信息与计算机学院',u'信息与计算机学院'),
+        (u'经济管理学院',u'经济管理学院'),
+        (u'人文社会科学学院',u'人文社会科学学院'),
+        (u'外国语学院',u'外国语学院'),
+        (u'马克思主义学院',u'马克思主义学院'),
+    }
+
+    std_id = models.CharField(u'学号', max_length=10, unique=True,
+        help_text=u'请输入小于十位的数字',
         validators=[
-            validators.RegexValidator(r'\d{1,30}',
+            validators.RegexValidator(r'\d{1,10}',
                                       u'请输入一个整数', 'invalid'),
         ],
         error_messages={
-            'unique': _("A user with that std_id already exists."),
+            'unique': u'该用户已存在',
         })
-    name = models.CharField(_('name'), max_length=30)
-    role = models.IntegerField(choices=role_list)  # 角色:老师，学生
+    name = models.CharField(u'姓名', max_length=30)
+    role = models.IntegerField(u'角色',choices=role_list)  # 角色:老师，学生
     email = models.EmailField(_('email address'), blank=True)
     is_staff = models.BooleanField(_('staff status'), default=False,
         help_text=_('Designates whether the user can log into this admin '
@@ -73,12 +92,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         help_text=_('Designates whether this user should be treated as '
                     'active. Unselect this instead of deleting accounts.'))
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
-    phone = models.CharField(blank=True,max_length=20)
-    # image = models.ImageField(blank=True,max_length=120)#用户头像
-    grade = models.CharField(blank=True,max_length=4,choices=grade_list)
-    institute = models.CharField(default=u'信息与计算机学院',max_length=128)
-    major = models.CharField(blank=True,max_length=20)#专业
-    adress = models.CharField(blank=True,max_length=32)#住址
+    phone = models.CharField(u'电话',blank=True,max_length=20)
+    grade = models.CharField(u'年级',blank=True,max_length=4,choices=grade_list)
+    institute = models.CharField(u'学院',default=u'信息与计算机学院',choices=institute_list,max_length=5)
+    major = models.CharField('专业',blank=True,max_length=20)#专业
+    adress = models.CharField(u'住址',blank=True,max_length=32)#住址
     objects = UserManager()
 
     USERNAME_FIELD = 'std_id'
@@ -88,6 +106,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = _('user')
         verbose_name_plural = _('users')
 
+    def get_short_name(self):
+        return self.name[1:]
+
+    def get_full_name(self):
+        return self.name
 
     def email_user(self, subject, message, from_email=None, **kwargs):
         """
