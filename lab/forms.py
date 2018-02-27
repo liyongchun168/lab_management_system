@@ -3,7 +3,6 @@
 from django import forms
 from django.core.validators import RegexValidator
 from .models import Good,ProjectTeam,User
-# from lab_admin_system.settings import AUTH_USER_MODEL as User
 
 class LoginForm(forms.ModelForm):
     class Meta:
@@ -19,8 +18,14 @@ class UserAddForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('std_id','name')
-    def save(self, commit=True):
 
+    def save(self, commit=True):
+        # 密码默认为学号
+        user = super(UserAddForm, self).save(commit=False)
+        user.set_password(self.cleaned_data["std_id"])
+        if commit:
+            user.save()
+        return user
 
 class GoodAddForm(forms.ModelForm):
     class Meta:

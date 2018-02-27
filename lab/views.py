@@ -101,10 +101,8 @@ def user_add(request):
     if request.method == 'POST':
         form = UserAddForm(request.POST)
         if form.is_valid():
-            school_num = form.cleaned_data['school_num']
-            user = User.objects.create_user(std_id=school_num, password=school_num)
-
-            return HttpResponseRedirect(reverse('user-list'))
+                form.save()
+                return HttpResponseRedirect(reverse('user-list'))
     else:
         form = UserAddForm()
     return render(request,'user_add.html',{'form':form})

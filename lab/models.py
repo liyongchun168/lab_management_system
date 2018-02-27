@@ -48,6 +48,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         ('2017',u'17级'),
     )
 
+    role_list = {
+        (1, u'老师'),
+        (2, u'学生'),
+    }
+
     std_id = models.CharField(_('student number'), max_length=30, unique=True,
         help_text=_('Required. 30 characters or fewer. Letters, digits and '
                     '@/./+/-/_ only.'),
@@ -59,6 +64,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             'unique': _("A user with that std_id already exists."),
         })
     name = models.CharField(_('name'), max_length=30)
+    role = models.IntegerField(choices=role_list)  # 角色:老师，学生
     email = models.EmailField(_('email address'), blank=True)
     is_staff = models.BooleanField(_('staff status'), default=False,
         help_text=_('Designates whether the user can log into this admin '
@@ -93,11 +99,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 #     '''实验室成员'''
 #
 #
-#     role_list = {
-#         (1,u'老师'),
-#         (2,u'学生'),
-#
-#     }
+    # role_list = {
+    #     (1,u'老师'),
+    #     (2,u'学生'),
+    # }
 #
 #     # user = models.OneToOneField(User)#OneToOne关系默认使用关联成员的小写，比如这个反查默认user.labmember，我改为lab,以弃用
 #     # role = models.IntegerField(choices=role_list)#角色：管理员，老师，学生
