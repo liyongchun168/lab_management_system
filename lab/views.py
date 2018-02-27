@@ -5,7 +5,7 @@ from .forms import GoodAddForm,GoodEditForm,ProjectPulishForm,LoginForm
 from django.http import HttpResponse,HttpResponseRedirect,HttpResponseForbidden,HttpResponseNotFound
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
-from .models import Good,ProjectTeam,User
+from .models import Good,Project,User
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 from django.contrib.auth.decorators import permission_required,login_required
 
@@ -131,7 +131,7 @@ def project_pulish(request):
     return render(request,'project_pulish.html',{'form':form})
 
 def project_list(request):
-    plist = ProjectTeam.objects.all()
+    plist = Project.objects.all()
     per_page = 5
     paginator = Paginator(plist,per_page)
     page = request.GET.get('page')

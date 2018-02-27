@@ -2,7 +2,7 @@
 # encoding: utf-8
 from django import forms
 from django.core.validators import RegexValidator
-from .models import Good,ProjectTeam,User
+from .models import Good,Project,User
 
 class LoginForm(forms.Form):
     std_id = forms.CharField(max_length=30)
@@ -43,7 +43,7 @@ class GoodEditForm(forms.ModelForm):
 
 class ProjectPulishForm(forms.ModelForm):
     class Meta:
-        model = ProjectTeam
+        model = Project
         fields = ('name','introduction')
 
     def save_it(self, instance, commit=True):

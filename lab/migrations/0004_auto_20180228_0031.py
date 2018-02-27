@@ -7,14 +7,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('lab', '0001_initial'),
+        ('lab', '0003_auto_20180228_0029'),
     ]
 
     operations = [
-        migrations.AddField(
+        migrations.AlterField(
             model_name='user',
             name='role',
-            field=models.IntegerField(default=1, choices=[(2, '\u5b66\u751f'), (1, '\u8001\u5e08')]),
-            preserve_default=False,
+            field=models.IntegerField(blank=True, null=True, verbose_name='\u89d2\u8272', choices=[(2, '\u5b66\u751f'), (1, '\u8001\u5e08')]),
         ),
     ]

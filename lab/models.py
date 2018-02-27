@@ -73,7 +73,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         (u'马克思主义学院',u'马克思主义学院'),
     }
 
-    std_id = models.CharField(u'学号', max_length=10, unique=True,
+    std_id = models.CharField(u'学号', max_length=30, unique=True,
         help_text=u'请输入小于十位的数字',
         validators=[
             validators.RegexValidator(r'\d{1,10}',
@@ -82,8 +82,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         error_messages={
             'unique': u'该用户已存在',
         })
-    name = models.CharField(u'姓名', max_length=30)
-    role = models.IntegerField(u'角色',choices=role_list)  # 角色:老师，学生
+    name = models.CharField(u'姓名', max_length=30,blank=True)
+    role = models.IntegerField(u'角色',choices=role_list,blank=True,null=True)  # 角色:老师，学生
     email = models.EmailField(_('email address'), blank=True)
     is_staff = models.BooleanField(_('staff status'), default=False,
         help_text=_('Designates whether the user can log into this admin '
@@ -94,7 +94,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
     phone = models.CharField(u'电话',blank=True,max_length=20)
     grade = models.CharField(u'年级',blank=True,max_length=4,choices=grade_list)
-    institute = models.CharField(u'学院',default=u'信息与计算机学院',choices=institute_list,max_length=5)
+    institute = models.CharField(u'学院',default=u'信息与计算机学院',choices=institute_list,max_length=30)
     major = models.CharField('专业',blank=True,max_length=20)#专业
     adress = models.CharField(u'住址',blank=True,max_length=32)#住址
     objects = UserManager()
@@ -208,7 +208,7 @@ class Good(models.Model):
     def __unicode__(self):
         return self.name
 
-class ProjectTeam(models.Model):
+class Project(models.Model):
     '''项目团队'''
     name = models.CharField(u'项目名称',max_length=128)
     introduction = models.TextField(u'项目介绍',blank=True)
@@ -248,7 +248,7 @@ class ProjectTeam(models.Model):
 
 class Finding(models.Model):
     '''资金申请'''
-    project_team = models.ForeignKey(ProjectTeam)#申请资金的项目团队
+    project_team = models.ForeignKey(Project)#申请资金的项目团队
     purpose = models.CharField(max_length=200)#申请目的
     status = models.BooleanField(default=False)#申请状态
     num = models.IntegerField(default=0)#数额
