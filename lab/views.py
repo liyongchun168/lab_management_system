@@ -16,10 +16,9 @@ def home_page(request):
 def login_view(request):
     error_msg = ""
     if request.method=='POST':
-
         login_form = LoginForm(request.POST)
         if login_form.is_valid():
-            username = login_form.cleaned_data['name']
+            username = login_form.cleaned_data['std_id']
             password = login_form.cleaned_data['password']
             user = authenticate(username=username,password=password)
             if user is not None:
@@ -96,7 +95,7 @@ def user_edit(request):
         user_form = UserEditForm(instance=request.user)
     return render(request,'user_edit.html',{'user_form':user_form})
 
-@login_required
+# @login_required
 def user_add(request):
     if request.method == 'POST':
         form = UserAddForm(request.POST)

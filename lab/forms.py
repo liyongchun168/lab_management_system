@@ -4,10 +4,9 @@ from django import forms
 from django.core.validators import RegexValidator
 from .models import Good,ProjectTeam,User
 
-class LoginForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ('std_id','password')
+class LoginForm(forms.Form):
+    std_id = forms.CharField(max_length=30)
+    password = forms.CharField(max_length=128,widget=forms.PasswordInput)
 
 class UserEditForm(forms.ModelForm):
     class Meta:
@@ -17,7 +16,7 @@ class UserEditForm(forms.ModelForm):
 class UserAddForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ('std_id','name')
+        fields = ('std_id','name','role')
 
     def save(self, commit=True):
         # 密码默认为学号
