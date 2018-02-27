@@ -9,26 +9,20 @@
 {#    <caption>物品列表</caption>#}
     <thead>
         <tr>
-            <th>物品</th>
-            <th>价格</th>
-            <th>数量</th>
-            <th>是否可用</th>
-            <th>借还情况</th>
-            <th>使用状态</th>
-            {% if perms.lab.change_good and perms.lab.delete_good %}
+            <th>项目名称</th>
+            <th>项目介绍</th>
+            <th>项目负责人</th>
+            {% if perms.lab.change_good and perms.lab.delete_project %}
                 <th>操作</th>
             {% endif %}
         </tr>
     </thead>
     <tbody>
-        {% for good in goods %}
+        {% for project in projects %}
             <tr>
-                <td>{{ good.name }}</td>
-                <td>{{ good.price }}</td>
-                <td>{{ good.num }}</td>
-                <td>{{ good.ke_yong }}</td>
-                <td>{{ good.jie}}</td>
-                <td>{{ good.shi_yong_qing_kuang }}</td>
+                <td>{{ project.name }}</td>
+                <td>{{ project.leader }}</td>
+
                 {% if perms.lab.change_good and perms.lab.delete_good %}
                 <td>
                     <a href="{% url 'del_good' good.id %}"><span class="glyphicon glyphicon-trash"></span></a>

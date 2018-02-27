@@ -8,10 +8,6 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 
 from .models import User
 class UserCreationForm(forms.ModelForm):
-    """
-    A form that creates a user, with no privileges, from the given username and
-    password.
-    """
     # error_messages = {
     #     'password_mismatch': _("The two password fields didn't match."),
     # }
@@ -20,11 +16,9 @@ class UserCreationForm(forms.ModelForm):
     # password2 = forms.CharField(label=_("Password confirmation"),
     #     widget=forms.PasswordInput,
     #     help_text=_("Enter the same password as above, for verification."))
-
     class Meta:
         model = User
         fields = ('std_id','name','role')
-
     # def clean_password2(self):
     #     password1 = self.cleaned_data.get("password1")
     #     password2 = self.cleaned_data.get("password2")
@@ -34,7 +28,6 @@ class UserCreationForm(forms.ModelForm):
     #             code='password_mismatch',
     #         )
     #     return password2
-
     def save(self, commit=True):
         user = super(UserCreationForm, self).save(commit=False)
         user.set_password(self.cleaned_data["std_id"])

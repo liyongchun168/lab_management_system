@@ -210,43 +210,43 @@ class Good(models.Model):
 
 class ProjectTeam(models.Model):
     '''项目团队'''
-    name = models.CharField(max_length=128)
-    introduction = models.TextField(blank=True)
-    members = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='join_project')#反查参加的项目
+    name = models.CharField(u'项目名称',max_length=128)
+    introduction = models.TextField(u'项目介绍',blank=True)
+    users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True,related_name='join_project')#反查参加的项目
     mem_status = models.BooleanField(default=True)#是否可以继续添加人员
     pro_status = models.BooleanField(default=False)#项目是否完成
     plan = models.IntegerField(default=0) #进度
     date = models.DateTimeField(auto_now_add=True)
-    leader = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='lead_project')#项目负责人,反查负责的项目
-    show = models.BooleanField(default=True)#是否显示，删除直接讲这个字段改为false
+    leader = models.ForeignKey(settings.AUTH_USER_MODEL,blank=True,null=True,related_name='lead_project')#项目负责人,反查负责的项目
+    is_active = models.BooleanField(default=True)#是否显示，删除直接讲这个字段改为false
 
     class Meta:
         ordering = ['-date']
 
     @property
     def member_num(self):
-        return self.members.count() #返回团队的总人数
+        return self.users.count() #返回团队的总人数
 
     @property
     def teachers(self):
-        labmembers = self.members.all()
-        return [labmember for labmember in labmembers if labmember.is_teacher == True]
+        users = self.users.all()
+        return [user for user in users if user.role == 1]
 
     @property
     def students(self):
-        labmembers = self.members.all()
-        return [labmember for labmember in labmembers if labmember.is_student == True]
+        users = self.users.all()
+        return [user for user in users if user.role == 2]
 
     @property
     def money(self):
-        finds = self.findingapplication_set.all()
+        finds = self.finding_set.all()
         return sum([find.num for find in finds])
 
-    def __unicode__(self):
-        return self.name
+    # def __unicode__(self):
+    #     return self.name
 
 
-class FindingApplication(models.Model):
+class Finding(models.Model):
     '''资金申请'''
     project_team = models.ForeignKey(ProjectTeam)#申请资金的项目团队
     purpose = models.CharField(max_length=200)#申请目的
@@ -254,7 +254,7 @@ class FindingApplication(models.Model):
     num = models.IntegerField(default=0)#数额
 
     def __unicode__(self):
-        return self.project_team
+        return self.purpose
 
 class notice(models.Model):
     '''通知'''

@@ -1,21 +1,17 @@
 {% extends 'base.html' %}
-
+{% load bootstrap3 %}
 {% block title %}
 发布项目
 {% endblock %}
 
 {% block content %}
-    <form action="" method="post" role="form" class="form">
-        {% csrf_token %}
-{#        <div class="form-group">#}
-{#            <label for="name">项目名称</label>#}
-{#            <input type="text" id="name" name="name" class="form-control" >#}
-{#        </div>#}
-{#        <div class="form-group">#}
-{#            <label for="introduction">项目介绍</label>#}
-{#            <input type="text" id="introduction" name="introduction" class="form-control" >#}
-{#        </div>#}
-        {{ form.as_p }}
+    <div class="row">
+    <div class="col-md-4 col-md-offset-4">
+        <form action="" method="post" role="form" class="form">
+            {% csrf_token %}
+            {% bootstrap_form form %}
             <button class="btn btn-default" type="submit">发布项目！</button>
-    </form>
+        </form>
+        </div>
+    </div>
 {% endblock %}

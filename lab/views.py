@@ -1,7 +1,7 @@
 # encoding:  utf-8
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render
-from .forms import GoodAddForm,GoodEditForm,ProjectPulishForm,LoginForm,UserEditForm,UserAddForm
+from .forms import GoodAddForm,GoodEditForm,ProjectPulishForm,LoginForm
 from django.http import HttpResponse,HttpResponseRedirect,HttpResponseForbidden,HttpResponseNotFound
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
@@ -70,41 +70,45 @@ def user_view(request,user_id):
     return render(request,'user_page.html', {'lab_user':lab_user})
 
 @login_required
-def user_edit(request):
-    #
-    # try:
-    #     user = LabMember.objects.get(id=user_id)
-    # except ObjectDoesNotExist:
-    #     return HttpResponseNotFound('404')
-    # if request.user.lab.id != user.id:#如果修改的用户不是当前用户就返回404
-    #     return HttpResponseNotFound('404没有找到')
-    # if request.method == 'POST':
-    #     user_form = UserEditForm(request.POST,instance=user)
-    #     if user_form.is_valid():
-    #         user_form.save()
-    #         return HttpResponseRedirect(reverse('user_view',args=(user_id,)))
-    # else:
-    #     user_form = UserEditForm(instance=user)
-    # return render(request,'user_edit.html',{'user_form':user_form})
-    if request.method == 'POST':
-        user_form = UserEditForm(request.POST,instance=request.user)
-        if user_form.is_valid():
-            user_form.save()
-            return HttpResponseRedirect(reverse('user_view',args=(request.user.id,)))
-    else:
-        user_form = UserEditForm(instance=request.user)
-    return render(request,'user_edit.html',{'user_form':user_form})
-
+def user_list(request):
+    user_list = User.objects.all()
+    return render(request,'user-list.html',{'user_list':user_list})
 # @login_required
-def user_add(request):
-    if request.method == 'POST':
-        form = UserAddForm(request.POST)
-        if form.is_valid():
-                form.save()
-                return HttpResponseRedirect(reverse('user-list'))
-    else:
-        form = UserAddForm()
-    return render(request,'user_add.html',{'form':form})
+# def user_edit(request):
+#     #
+#     # try:
+#     #     user = LabMember.objects.get(id=user_id)
+#     # except ObjectDoesNotExist:
+#     #     return HttpResponseNotFound('404')
+#     # if request.user.lab.id != user.id:#如果修改的用户不是当前用户就返回404
+#     #     return HttpResponseNotFound('404没有找到')
+#     # if request.method == 'POST':
+#     #     user_form = UserEditForm(request.POST,instance=user)
+#     #     if user_form.is_valid():
+#     #         user_form.save()
+#     #         return HttpResponseRedirect(reverse('user_view',args=(user_id,)))
+#     # else:
+#     #     user_form = UserEditForm(instance=user)
+#     # return render(request,'user_edit.html',{'user_form':user_form})
+#     if request.method == 'POST':
+#         user_form = UserEditForm(request.POST,instance=request.user)
+#         if user_form.is_valid():
+#             user_form.save()
+#             return HttpResponseRedirect(reverse('user_view',args=(request.user.id,)))
+#     else:
+#         user_form = UserEditForm(instance=request.user)
+#     return render(request,'user_edit.html',{'user_form':user_form})
+#
+# @login_required
+# def user_add(request):
+#     if request.method == 'POST':
+#         form = UserAddForm(request.POST)
+#         if form.is_valid():
+#                 form.save()
+#                 return HttpResponseRedirect(reverse('user-list'))
+#     else:
+#         form = UserAddForm()
+#     return render(request,'user_add.html',{'form':form})
 
 @login_required
 @permission_required('lab.delete_labmember',raise_exception=True)
@@ -114,16 +118,13 @@ def user_del(request,d):
     User.objects.get(id = user_id).delete()
     return HttpResponseRedirect(reverse('user-list'))
 
-@login_required
-def user_list(request):
-    user_list = User.objects.all()
-    return render(request,'user-list.html',{'user_list':user_list})
+
 
 def project_pulish(request):
     if request.method == 'POST':
         form = ProjectPulishForm(request.POST)
         if form.is_valid():
-            form.save()
+            form.save_it(request.user)#讲当前用户传进去作为leader，并且自动加入项目团队
             return HttpResponseRedirect(reverse('project-list'))
     else:
         form =ProjectPulishForm()
