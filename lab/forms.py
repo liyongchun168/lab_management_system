@@ -2,7 +2,7 @@
 # encoding: utf-8
 from django import forms
 from django.core.validators import RegexValidator
-from .models import Good,Project,User
+from .models import Good,Project,User,ProApprove
 
 class LoginForm(forms.Form):
     std_id = forms.CharField(max_length=30)
@@ -46,10 +46,8 @@ class ProjectPulishForm(forms.ModelForm):
         model = Project
         fields = ('name','introduction')
 
-    def save_it(self, instance, commit=True):
+    def save_it(self, u):
         p = self.save()#这个必须要先创建，不然在多对多关联的时候没有对象报错
-        p.leader = instance
-        p.users.add(instance)
-        if commit:
-            p.save()
+        u.lead_project.add(p)#讲这个用户这位leader
+        ProApprove.objects.create(project=p,user=u,status=2)
         return p

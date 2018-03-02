@@ -199,19 +199,18 @@ class Project(models.Model):
     '''项目团队'''
     name = models.CharField(u'项目名称',max_length=128)
     introduction = models.TextField(u'项目介绍',blank=True)
-    users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True,through='ProApprove',related_name='join_project')#反查参加的项目
+    users = models.ManyToManyField(User, blank=True,through='ProApprove')#反查参加的项目
     is_full= models.BooleanField(default=False)#人员是否收满了
     is_finish = models.BooleanField(default=False)#项目是否完成了
     plan = models.IntegerField(default=0) #进度
     date = models.DateTimeField(auto_now_add=True)
-    leader = models.ForeignKey(settings.AUTH_USER_MODEL,blank=True,null=True,related_name='lead_project')#项目负责人,反查负责的项目
+    leader = models.ForeignKey(User,blank=True,null=True,related_name='lead_project')#项目负责人,反查负责的项目
     is_active = models.BooleanField(default=True)#是否显示，删除直接讲这个字段改为false
 
     class Meta:
         ordering = ['-date']
         permissions = (
             ("apply_project", u"可以申请项目"),
-
         )
 
     @property
@@ -239,9 +238,9 @@ class Project(models.Model):
 
 
 class ProApprove(models.Model):
-    project = models.ForeignKey(Project)
+    project = models.ForeignKey(Project,blank=True,null=True)
     user = models.ForeignKey(User)
-    status = models.IntegerField(choices=((0,u'不通过'),(1,u'等待'),(2,u'通过'),))
+    status = models.IntegerField(default=1,choices=((0,u'不通过'),(1,u'等待'),(2,u'通过'),))
 
 
 

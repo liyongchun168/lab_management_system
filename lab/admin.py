@@ -71,7 +71,7 @@ class MyUserAdmin(UserAdmin):
     list_filter = ('is_superuser',)
     fieldsets = (
         (None, {'fields': ('std_id', 'name','password')}),
-        (_('Personal info'), {'fields': ('role','email','phone','grade','institute','major','adress')}),
+        (_('Personal info'), {'fields': ('email','phone','grade','institute','major','adress')}),
         (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser','groups', 'user_permissions')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )
