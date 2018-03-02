@@ -193,28 +193,15 @@ class User(AbstractBaseUser, PermissionsMixin):
 #         return self.name
 
 
-class Good(models.Model):
-    '''实验室物品'''
-    name = models.CharField(max_length=128)
-    add_date = models.DateTimeField(auto_now_add=True)
-    price = models.IntegerField(default=0)
-    num = models.IntegerField(default=1)
-    shi_yong_qing_kuang = models.CharField(max_length=128,default=u'无')
-    jie = models.CharField(max_length=128,default=u'无')#借给他人
-    ke_yong = models.BooleanField(default=True)#借给他人？是否能用
-    class Meta:
-        ordering= ['-add_date']
 
-    def __unicode__(self):
-        return self.name
 
 class Project(models.Model):
     '''项目团队'''
     name = models.CharField(u'项目名称',max_length=128)
     introduction = models.TextField(u'项目介绍',blank=True)
-    users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True,related_name='join_project')#反查参加的项目
-    mem_status = models.BooleanField(default=True)#是否可以继续添加人员
-    pro_status = models.BooleanField(default=False)#项目是否完成
+    users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True,through='ProApprove',related_name='join_project')#反查参加的项目
+    is_full= models.BooleanField(default=False)#人员是否收满了
+    is_finish = models.BooleanField(default=False)#项目是否完成了
     plan = models.IntegerField(default=0) #进度
     date = models.DateTimeField(auto_now_add=True)
     leader = models.ForeignKey(settings.AUTH_USER_MODEL,blank=True,null=True,related_name='lead_project')#项目负责人,反查负责的项目
@@ -222,6 +209,10 @@ class Project(models.Model):
 
     class Meta:
         ordering = ['-date']
+        permissions = (
+            ("apply_project", u"可以申请项目"),
+
+        )
 
     @property
     def member_num(self):
@@ -246,15 +237,40 @@ class Project(models.Model):
     #     return self.name
 
 
+
+class ProApprove(models.Model):
+    project = models.ForeignKey(Project)
+    user = models.ForeignKey(User)
+    status = models.IntegerField(choices=((0,u'不通过'),(1,u'等待'),(2,u'通过'),))
+
+
+
 class Finding(models.Model):
     '''资金申请'''
-    project_team = models.ForeignKey(Project)#申请资金的项目团队
+    project = models.ForeignKey(Project)#申请资金的项目团队
     purpose = models.CharField(max_length=200)#申请目的
     status = models.BooleanField(default=False)#申请状态
     num = models.IntegerField(default=0)#数额
 
     def __unicode__(self):
         return self.purpose
+
+
+
+class Good(models.Model):
+    '''实验室物品'''
+    name = models.CharField(max_length=128)
+    add_date = models.DateTimeField(auto_now_add=True)
+    price = models.IntegerField(default=0)
+    num = models.IntegerField(default=1)
+    shi_yong_qing_kuang = models.CharField(max_length=128,default=u'无')
+    jie = models.CharField(max_length=128,default=u'无')#借给他人
+    ke_yong = models.BooleanField(default=True)#借给他人？是否能用
+    class Meta:
+        ordering= ['-add_date']
+
+    def __unicode__(self):
+        return self.name
 
 class notice(models.Model):
     '''通知'''

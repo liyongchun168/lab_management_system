@@ -130,6 +130,14 @@ def project_pulish(request):
         form =ProjectPulishForm()
     return render(request,'project_pulish.html',{'form':form})
 
+def project_delete(request,id):
+    Project.objects.get(id = id).delete()
+    return HttpResponseRedirect(reverse('project-list'))
+
+def project_apply(request, id):
+    Project.objects.get(id = id).users.add(request.user)
+    return HttpResponseRedirect(reverse('project-list'))
+
 def project_list(request):
     plist = Project.objects.all()
     per_page = 5

@@ -12,7 +12,7 @@
             <th>项目名称</th>
             <th>项目介绍</th>
             <th>项目负责人</th>
-            {% if perms.lab.change_good and perms.lab.delete_project %}
+            {% if perms.lab.delete_project or perms.lab.apply_project %}
                 <th>操作</th>
             {% endif %}
         </tr>
@@ -21,14 +21,20 @@
         {% for project in projects %}
             <tr>
                 <td>{{ project.name }}</td>
-                <td>{{ project.leader }}</td>
-
-                {% if perms.lab.change_good and perms.lab.delete_good %}
+                <td>{{ project.introduction }}</td>
+                <td>{{ project.leader.name }}</td>
                 <td>
-                    <a href="{% url 'del_good' good.id %}"><span class="glyphicon glyphicon-trash"></span></a>
-                    <a href="{% url 'edit_good' good.id %}"><span class="glyphicon glyphicon-edit"></span></a>
+                    {% if perms.lab.delete_project %}
+                        <a href="{% url 'project-del' project.id %}">删除</a>
+                    {% endif %}
+                    {% if perms.lab.apply_project %}
+                        {% if user in project.users.all %}
+                            <a href="">已申请</a>
+                        {% else %}
+                            <a href="{% url 'project-apply' project.id %}">申请</a>
+                        {% endif %}
+                    {% endif %}
                 </td>
-                {% endif %}
 
             </tr>
         {% endfor %}
