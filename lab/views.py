@@ -5,7 +5,7 @@ from .forms import GoodAddForm,GoodEditForm,ProjectPulishForm,LoginForm
 from django.http import HttpResponse,HttpResponseRedirect,HttpResponseForbidden,HttpResponseNotFound
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
-from .models import Good,Project,User
+from .models import Good,Project,User,ProApprove
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 from django.contrib.auth.decorators import permission_required,login_required
 
@@ -135,7 +135,8 @@ def project_delete(request,id):
     return HttpResponseRedirect(reverse('project-list'))
 
 def project_apply(request, id):
-    Project.objects.get(id = id).users.add(request.user)
+    p = Project.objects.get(id = id)
+    ProApprove.objects.create(project=p,user=request.user)
     return HttpResponseRedirect(reverse('project-list'))
 
 def project_list(request):

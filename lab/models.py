@@ -240,7 +240,7 @@ class Project(models.Model):
 class ProApprove(models.Model):
     project = models.ForeignKey(Project,blank=True,null=True)
     user = models.ForeignKey(User)
-    status = models.IntegerField(default=1,choices=((0,u'不通过'),(1,u'等待'),(2,u'通过'),))
+    status = models.IntegerField(default=2,choices=((0,u'不通过'),(1,u'通过'),(2,u'等待'),))
 
 
 

@@ -31,9 +31,9 @@
                             {% if project|have_user:request.user %}
                                 {% if project|status:request.user == 0 %}
                                     <a href="">已拒绝</a>
-                                {% elif project|status:request.user == 1 %}
-                                    <a href="">已申请</a>
                                 {% elif project|status:request.user == 2 %}
+                                    <a href="">已申请</a>
+                                {% elif project|status:request.user == 1 %}
                                     <a href="">已通过</a>
                                 {% endif %}
                             {% else %}
