@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}
+申请信息
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4 col-md-offset-1">
+        {% if pro_approves %}
+            {% for p in pro_approves %}
+            <p>
+                {{ p.user.name }}向你申请{{ p.project.name }}项目
+                <span><a href="{% url 'project-app' p.id 1 %}">通过</a>
+                </span><a href="{% url 'project-app' p.id 0 %}">拒绝</a>
+            </p>
+        {% endfor %}
+        {% else %}
+            <p>暂时没有项目通知哦</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

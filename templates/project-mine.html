@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}
+我的项目
+{% endblock %}
+
+{% block content %}
+<table class="table table-bordered">
+<thead>
+<tr>
+    <th>项目名称</th>
+    <th>项目负责人</th>
+</tr>
+</thead>
+<tbody>
+{% for project in projects %}
+    <tr>
+        <td><a href="">{{ project.name }}</a></td>
+        <td>{{ project.leader.name }}</td>
+    </tr>
+{% endfor %}
+</tbody>
+
+</table>
+{% endblock %}
