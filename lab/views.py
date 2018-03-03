@@ -134,6 +134,7 @@ def project_delete(request,id):
     Project.objects.get(id = id).delete()
     return HttpResponseRedirect(reverse('project-list'))
 
+@permission_required('lab.apply_project',raise_exception=True)
 def project_apply(request, id):
     p = Project.objects.get(id = id)
     ProApprove.objects.create(project=p,user=request.user)
@@ -143,8 +144,16 @@ def project_message(request):
     p = ProApprove.objects.filter(project__leader=request.user).filter(status=2)
     return render(request,'project-msg.html',{'pro_approves':p})
 
-def project_approve(request):
-    return
+def project_approve(request,p_id,status):
+    if int(status)==1:
+        ProApprove.objects.filter(id = p_id).update(status=1)
+    if int(status)==0:
+        ProApprove.objects.filter(id = p_id).update(status=0)
+    return HttpResponseRedirect(reverse('project-msg'))
+
+def project_mine(request):
+    p = Project.objects.filter(users__id=request.user.id)
+    return render(request,'project-mine.html',{'projects':p})
 
 def project_list(request):
     plist = Project.objects.all()

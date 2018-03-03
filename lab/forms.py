@@ -52,7 +52,7 @@ class ProjectPulishForm(forms.ModelForm):
     def save_it(self, u):
         p = self.save()#这个必须要先创建，不然在多对多关联的时候没有对象报错
         u.lead_project.add(p)#讲这个用户这位leader
-        ProApprove.objects.create(project=p,user=u,status=2)
+        ProApprove.objects.create(project=p,user=u)
         # delete_prem = Permission.objects.filter(codename='delete_project').first()
         # try:
         #     apply_premission = Permission.objects.filter(codename='apply_project').first()

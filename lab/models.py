@@ -95,7 +95,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     phone = models.CharField(u'电话',blank=True,max_length=20)
     grade = models.CharField(u'年级',blank=True,max_length=4,choices=grade_list)
     institute = models.CharField(u'学院',default=u'信息与计算机学院',choices=institute_list,max_length=30)
-    major = models.CharField('专业',blank=True,max_length=20)#专业
+    major = models.CharField(u'专业',blank=True,max_length=20)#专业
     adress = models.CharField(u'住址',blank=True,max_length=32)#住址
     objects = UserManager()
 
@@ -232,8 +232,8 @@ class Project(models.Model):
         finds = self.finding_set.all()
         return sum([find.num for find in finds])
 
-    # def __unicode__(self):
-    #     return self.name
+    def __unicode__(self):
+        return self.name
 
 
 
@@ -251,6 +251,11 @@ class Finding(models.Model):
     status = models.BooleanField(default=False)#申请状态
     num = models.IntegerField(default=0)#数额
 
+    class Meta:
+        permissions = (
+            ("apply_finding", u"可以申请资金"),
+        )
+
     def __unicode__(self):
         return self.purpose
 
@@ -267,6 +272,9 @@ class Good(models.Model):
     ke_yong = models.BooleanField(default=True)#借给他人？是否能用
     class Meta:
         ordering= ['-add_date']
+        permissions = (
+            ("apply_good", u"可以申请物品"),
+        )
 
     def __unicode__(self):
         return self.name
