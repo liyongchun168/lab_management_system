@@ -139,6 +139,13 @@ def project_apply(request, id):
     ProApprove.objects.create(project=p,user=request.user)
     return HttpResponseRedirect(reverse('project-list'))
 
+def project_message(request):
+    p = ProApprove.objects.filter(project__leader=request.user).filter(status=2)
+    return render(request,'project-msg.html',{'pro_approves':p})
+
+def project_approve(request):
+    return
+
 def project_list(request):
     plist = Project.objects.all()
     per_page = 5

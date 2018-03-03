@@ -32,6 +32,7 @@ urlpatterns = [
     url(r'^project/publish/$','lab.views.project_pulish',name='project-publish'),
     url(r'^project/del/(\d+)$','lab.views.project_delete',name='project-del'),
     url(r'^project/apply/(\d+)$','lab.views.project_apply',name='project-apply'),
+    url(r'^project/message/$','lab.views.project_message',name='project-msg'),
     url(r'^user/(\d+)','lab.views.user_view', name='user-view'),
     # url(r'^user/edit/$','lab.views.user_edit',name='user-edit'),
     # url(r'^user/add/$', 'lab.views.user_add', name='user-add'),
