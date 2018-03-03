@@ -27,19 +27,19 @@
                     {% if perms.lab.delete_project %}
                         <a href="{% url 'project-del' project.id %}">删除</a>
                     {% else %}
-                    {% if perms.lab.apply_project %}
-                        {% if project|have_user:request.user %}
-                            {% if project|status:request.user == 0 %}
-                                <a href="">已拒绝</a>
-                            {% elif project|status:request.user == 1 %}
-                                <a href="">已申请</a>
-                            {% elif project|status:request.user == 2 %}
-                                <a href="">已通过</a>
+                        {% if perms.lab.apply_project %}
+                            {% if project|have_user:request.user %}
+                                {% if project|status:request.user == 0 %}
+                                    <a href="">已拒绝</a>
+                                {% elif project|status:request.user == 1 %}
+                                    <a href="">已申请</a>
+                                {% elif project|status:request.user == 2 %}
+                                    <a href="">已通过</a>
+                                {% endif %}
+                            {% else %}
+                                <a href="{% url 'project-apply' project.id %}">申请</a>
                             {% endif %}
-                        {% else %}
-                            <a href="{% url 'project-apply' project.id %}">申请</a>
                         {% endif %}
-                    {% endif %}
                     {% endif %}
                 </td>
             </tr>

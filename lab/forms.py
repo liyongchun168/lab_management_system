@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 # encoding: utf-8
 from django import forms
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import RegexValidator
 from .models import Good,Project,User,ProApprove
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
 
 class LoginForm(forms.Form):
     std_id = forms.CharField(max_length=30)
@@ -50,4 +53,12 @@ class ProjectPulishForm(forms.ModelForm):
         p = self.save()#这个必须要先创建，不然在多对多关联的时候没有对象报错
         u.lead_project.add(p)#讲这个用户这位leader
         ProApprove.objects.create(project=p,user=u,status=2)
+        # delete_prem = Permission.objects.filter(codename='delete_project').first()
+        # try:
+        #     apply_premission = Permission.objects.filter(codename='apply_project').first()
+        # except ObjectDoesNotExist:
+        #     content_type = ContentType.objects.get_for_model(Project)
+        #     apply_premission = Permission.objects.create(codename='apply_project',name=u'可以申请项目',content_type=content_type)
+        # u.user_premissions.add(apply_premission,delete_premission)#给项目发起人
+        # u.user_permissions.add(delete_prem)
         return p

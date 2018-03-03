@@ -1,5 +1,5 @@
 
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save,post_migrate
 from django.dispatch import receiver
 from django.contrib.auth.models import Group, Permission
 from .models import User
@@ -53,3 +53,13 @@ def add_groups(sender, instance,created, **kwargs):
 
         if instance.role==2:
             add_student(instance)
+
+@receiver(post_migrate)
+def creat_permissions(sender,**kwargs):
+    from django.contrib.auth.models import Permission,Group
+    from django.contrib.contenttypes.models import ContentType
+    from .models import User
+    s,created = Group.objects.get_or_create(name='student')
+    t,created = Group.objects.get_or_create(name='teacher')
+    apply_project = Permission.objects.filter(codename='apply_project').first()
+    s.permissions.add(apply_project)
