@@ -6,6 +6,6 @@
 
 {% block content %}
     {% for lab in lab_list %}
-        <li><a href="{% url 'user-view' lab.id %}">{{lab.name }}</a></li>
+        <li><a href="{% url 'user-detail' lab.id %}">{{lab.name }}</a></li>
     {% endfor %}
 {% endblock %}

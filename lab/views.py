@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import permission_required,login_required
 
 @login_required
 def home_page(request):
-    return render(request, 'home_page.html')
+    return render(request, 'home.html')
 
 def login_view(request):
     error_msg = ""
@@ -62,17 +62,14 @@ def login_view(request):
 #     return render(request,'registration/register.html',{'register_form':register_form,'error_msg':error_msg})
 
 @login_required
-def user_view(request,user_id):
-    try:
-        lab_user = User.objects.get(id=user_id)
-    except ObjectDoesNotExist:
-        return HttpResponseNotFound('404')
-    return render(request,'user_page.html', {'lab_user':lab_user})
+def user_detail(request, user_id):
+    user = User.objects.get(id=user_id)
+    return render(request, 'user_detail.html', {'user':user})
 
 @login_required
 def user_list(request):
     user_list = User.objects.all()
-    return render(request,'user-list.html',{'user_list':user_list})
+    return render(request, 'user_list.html', {'user_list':user_list})
 # @login_required
 # def user_edit(request):
 #     #
@@ -128,7 +125,7 @@ def project_pulish(request):
             return HttpResponseRedirect(reverse('project-list'))
     else:
         form =ProjectPulishForm()
-    return render(request,'project_pulish.html',{'form':form})
+    return render(request, 'project_pulish.html', {'form':form})
 
 def project_delete(request,id):
     Project.objects.get(id = id).delete()
@@ -142,7 +139,7 @@ def project_apply(request, id):
 
 def project_message(request):
     p = ProApprove.objects.filter(project__leader=request.user).filter(status=2)
-    return render(request,'project-msg.html',{'pro_approves':p})
+    return render(request, 'project_msg.html', {'pro_approves':p})
 
 def project_approve(request,p_id,status):
     if int(status)==1:
@@ -153,7 +150,7 @@ def project_approve(request,p_id,status):
 
 def project_mine(request):
     p = Project.objects.filter(users__id=request.user.id)
-    return render(request,'project-mine.html',{'projects':p})
+    return render(request, 'project_mine.html', {'projects':p})
 
 def project_list(request):
     plist = Project.objects.all()
@@ -166,11 +163,11 @@ def project_list(request):
         projects = paginator.page(1)
     except EmptyPage:
         projects = paginator.page(paginator.num_pages)
-    return render(request,'project-list.html',{'projects':projects})
+    return render(request, 'project_list.html', {'projects':projects})
 
 def project_detail(request, id):
     project = Project.objects.get(id = id)
-    return render(request,'project-detail.html',{'project':project})
+    return render(request, 'project_detail.html', {'project':project})
 
 @login_required
 def good_list(request):
@@ -228,5 +225,7 @@ def edit_money(request):
     pass
 def del_money(request):
     pass
+
+
 
 

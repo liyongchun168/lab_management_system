@@ -4,8 +4,8 @@
 项目列表
 {% endblock %}
 {% block content %}
-<div class="container">
-    <table class="table table-bordered">
+    <div class="container">
+    <table class="table table-striped">
         <caption>可申请项目</caption>
         <thead>
             <tr>
@@ -22,7 +22,7 @@
                 <tr>
                     <td><a href="{% url 'project-detail' project.id %}">{{ project.name }}</a></td>
 {#                    <td>{{ project.introduction }}</td>#}
-                    <td>{{ project.leader.name }}</td>
+                    <td><a href="{% url 'user-detail' project.leader.id %}">{{ project.leader.name }}</a></td>
                     <td>
                         {% if perms.lab.delete_project %}
                             <a href="{% url 'project-del' project.id %}">删除</a>
@@ -79,4 +79,6 @@
     </nav>
     {% endif %}
 </div>
+ 
 {% endblock %}
+

@@ -42,11 +42,11 @@ urlpatterns = [
     url(r'^project/approve/(\d+)/(\d)$','lab.views.project_approve',name='project-app'),
     url(r'^project/mine/$', 'lab.views.project_mine', name='project-mine'),
 
-    url(r'^user/(\d+)','lab.views.user_view', name='user-view'),
+    url(r'^user/(\d+)', 'lab.views.user_detail', name='user-detail'),
     # url(r'^user/edit/$','lab.views.user_edit',name='user-edit'),
     # url(r'^user/add/$', 'lab.views.user_add', name='user-add'),
     # url(r'^user/del/(\d+)','lab.views.user_del',name='user-del'),
-    url(r'^user/$', 'lab.views.user_list', name='user-list'),
+    url(r'^user/list/$', 'lab.views.user_list', name='user-list'),
 
     # url(r'^person/$','lab.views.person',name='person'),
     # url(r'^good/(\d*)/$','lab.views.good_detail',name='good_detail')
