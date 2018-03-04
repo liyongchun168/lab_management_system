@@ -32,7 +32,7 @@ class LoginForm(forms.Form):
 class GoodAddForm(forms.ModelForm):
     class Meta:
         model = Good
-        fields = ('name','price','num')
+        fields = ('name','price','all_num')
         # labels = {
         #     'name':_(u'name'),
         #     'price':_(u'price'),
@@ -42,17 +42,17 @@ class GoodAddForm(forms.ModelForm):
 class GoodEditForm(forms.ModelForm):
     class Meta:
         model = Good
-        fields = ('name','price','num','shi_yong_qing_kuang','jie')
+        fields = ('name','price','all_num')
 
 class ProjectPulishForm(forms.ModelForm):
     class Meta:
         model = Project
-        fields = ('name','introduction')
+        fields = ('name','introduction','start_t','end_t')
 
     def save_it(self, u):
         p = self.save()#这个必须要先创建，不然在多对多关联的时候没有对象报错
         u.lead_project.add(p)#讲这个用户这位leader
-        ProApprove.objects.create(project=p,user=u)
+        ProApprove.objects.create(project=p,user=u,status=1)
         # delete_prem = Permission.objects.filter(codename='delete_project').first()
         # try:
         #     apply_premission = Permission.objects.filter(codename='apply_project').first()

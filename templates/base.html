@@ -68,8 +68,14 @@
                     <span class="glyphicon glyphicon-briefcase"></span> 物品管理 <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{% url 'good' %}"> 物品信息</a></li>
-                        <li role="separator" class="divider"></li>
+                        {% if user.is_superuser %}
+                            <li role="separator" class="divider"></li>
                         <li><a href=" "> 物品申请通知</a></li>
+                        {% endif %}
+
+                        <li role="separator" class="divider"></li>
+                        <li><a href="">物品申请</a></li>
+
                     </ul>
                 </li>
             <li class=" "><a href="#"><span class="glyphicon glyphicon-user"></span>实验室成员</a></li>

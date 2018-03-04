@@ -3,74 +3,80 @@
 {% block title %}
 项目列表
 {% endblock %}
-
 {% block content %}
-<table class="table table-bordered">
-    <caption>可申请项目</caption>
-    <thead>
-        <tr>
-            <th>项目名称</th>
-            <th>项目介绍</th>
-            <th>项目负责人</th>
-            {% if perms.lab.delete_project or perms.lab.apply_project %}
-                <th>操作</th>
-            {% endif %}
-        </tr>
-    </thead>
-    <tbody>
-        {% for project in projects %}
+<div class="container">
+    <table class="table table-bordered">
+        <caption>可申请项目</caption>
+        <thead>
             <tr>
-                <td>{{ project.name }}</td>
-                <td>{{ project.introduction }}</td>
-                <td>{{ project.leader.name }}</td>
-                <td>
-                    {% if perms.lab.delete_project %}
-                        <a href="{% url 'project-del' project.id %}">删除</a>
-                    {% else %}
-                        {% if perms.lab.apply_project %}
-                            {% if project|have_user:request.user %}
-                                {% if project|status:request.user == 0 %}
-                                    <a href="">已拒绝</a>
-                                {% elif project|status:request.user == 2 %}
-                                    <a href="">已申请</a>
-                                {% elif project|status:request.user == 1 %}
-                                    <a href="">已通过</a>
+                <th>项目名称</th>
+{#                <th>项目介绍</th>#}
+                <th>项目负责人</th>
+                {% if perms.lab.delete_project or perms.lab.apply_project %}
+                    <th>操作</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects %}
+                <tr>
+                    <td><a href="{% url 'project-detail' project.id %}">{{ project.name }}</a></td>
+{#                    <td>{{ project.introduction }}</td>#}
+                    <td>{{ project.leader.name }}</td>
+                    <td>
+                        {% if perms.lab.delete_project %}
+                            <a href="{% url 'project-del' project.id %}">删除</a>
+                        {% else %}
+                            {% if perms.lab.apply_project %}
+                                {% if project|have_user:request.user %}
+                                    {% if project|status:request.user == 0 %}
+                                        <a href="">已拒绝</a>
+                                    {% elif project|status:request.user == 2 %}
+                                        <a href="">已申请</a>
+                                    {% elif project|status:request.user == 1 %}
+                                        <a href="">已通过</a>
+                                    {% endif %}
+                                {% else %}
+                                    <a href="{% url 'project-apply' project.id %}">申请</a>
                                 {% endif %}
-                            {% else %}
-                                <a href="{% url 'project-apply' project.id %}">申请</a>
                             {% endif %}
                         {% endif %}
-                    {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
-<nav aria-label="Page navigation">
-  <ul class="pagination">
-      {% if projects.has_previous %}
-          <li>
-              <a href="?page={{ projects.previous_page_number }}" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-              </a>
-          </li>
-      {% endif %}
-
-    {%  for pg in projects.paginator.page_range %}
-        {% if projects.number == pg %}
-            <li class="active"><a href="?page={{ pg }}">{{ pg }}</a></li>
-        {% else %}
-            <li><a href="?page={{ pg }}">{{ pg }}</a></li>
-        {% endif %}
-    {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
     {% if projects.has_next %}
-        <li>
-          <a href="?page={{ projects.next_page_number }}" aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-          </a>
-        </li>
+        <nav aria-label="Page navigation">
+
+
+      <ul class="pagination">
+          {% if projects.has_previous %}
+              <li>
+                  <a href="?page={{ projects.previous_page_number }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+              </li>
+          {% endif %}
+
+        {%  for pg in projects.paginator.page_range %}
+            {% if projects.number == pg %}
+                <li class="active"><a href="?page={{ pg }}">{{ pg }}</a></li>
+            {% else %}
+                <li><a href="?page={{ pg }}">{{ pg }}</a></li>
+            {% endif %}
+        {% endfor %}
+
+        {% if projects.has_next %}
+            <li>
+              <a href="?page={{ projects.next_page_number }}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
         {% endif %}
-  </ul>
-</nav>
+      </ul>
+    </nav>
+    {% endif %}
+</div>
 {% endblock %}

@@ -157,7 +157,7 @@ def project_mine(request):
 
 def project_list(request):
     plist = Project.objects.all()
-    per_page = 5
+    per_page = 20
     paginator = Paginator(plist,per_page)
     page = request.GET.get('page')
     try:
@@ -168,15 +168,19 @@ def project_list(request):
         projects = paginator.page(paginator.num_pages)
     return render(request,'project-list.html',{'projects':projects})
 
+def project_detail(request, id):
+    project = Project.objects.get(id = id)
+    return render(request,'project-detail.html',{'project':project})
+
 @login_required
-def good_view(request):
-    if request.method=='POST':
-        form = GoodAddForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('good'))
+def good_list(request):
+    # if request.method=='POST':
+    #     form = GoodAddForm(request.POST)
+    #     if form.is_valid():
+    #         form.save()
+    #         return HttpResponseRedirect(reverse('good'))
     good_list = Good.objects.all()
-    per_page = 5
+    per_page = 20
     paginator = Paginator(good_list,per_page)
     page = request.GET.get('page')
     try:
@@ -185,17 +189,25 @@ def good_view(request):
         goods = paginator.page(1)
     except EmptyPage:
         goods = paginator.page(paginator.num_pages)
-    return render(request,'good.html',{'goods':goods})
+    return render(request, 'good-list.html', {'goods':goods})
 
+def good_detail(request):
+    return
+
+def good_search(request):
+    return
+
+def good_apply(request,g_id):
+    return
 @login_required
 @permission_required('lab.delete_good',raise_exception=True)
-def del_good(request,id):
+def good_del(request, id):
     Good.objects.get(id = id).delete()
     return HttpResponseRedirect(reverse('good'))
 
 @login_required
 @permission_required('lab.change_good',raise_exception=True)
-def edit_good(request,id):
+def good_edit(request, id):
     if request.method == 'POST':
         try:
             good = Good.objects.get(id = id)

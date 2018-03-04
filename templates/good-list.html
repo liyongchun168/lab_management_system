@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% block title %}
+物品管理
+{% endblock %}
+{% block style %}
+    <style>
+        .table th, .table td {
+        text-align: center;
+        vertical-align: middle!important;
+}
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+    {#    <form class="form-inline" role="form" method="POST">#}
+    {#        {% csrf_token %}#}
+    {#        {% bootstrap_form good_form %}#}
+    {#      <button type="submit" class="btn btn-default">添加</button>#}
+    {#    </form>#}
+
+
+        <table class="table table-bordered">
+        {#    <caption>物品列表</caption>#}
+            <thead>
+                <tr>
+                    <th>编号</th>
+                    <th>物品</th>
+                    <th>价格</th>
+                    <th>数量</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for good in goods %}
+                    <tr>
+                        <td>{{ good.id }}</td>
+                        <td>{{ good.name }}</td>
+                        <td>{{ good.price }}</td>
+                        <td>{{ good.active_num }}/{{ good.all_num }}</td>
+
+                        <td>
+                            {% if user.is_superuser %}
+                                <a href="{% url 'del_good' good.id %}"><span class="glyphicon glyphicon-trash"></span></a>
+                                <a href="{% url 'edit_good' good.id %}"><span class="glyphicon glyphicon-edit"></span></a>
+                            {% else %}
+                                <a href="">申请</a>
+                        {% endif %}
+
+                        </td>
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% if goods.has_next %}
+        <nav aria-label="Page navigation">
+          <ul class="pagination">
+              {% if goods.has_previous %}
+                  <li>
+                      <a href="?page={{ goods.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                      </a>
+                  </li>
+              {% endif %}
+
+            {%  for pg in goods.paginator.page_range %}
+                {% if goods.number == pg %}
+                    <li class="active"><a href="?page={{ pg }}">{{ pg }}</a></li>
+                {% else %}
+                    <li><a href="?page={{ pg }}">{{ pg }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if goods.has_next %}
+                <li>
+                  <a href="?page={{ goods.next_page_number }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+                {% endif %}
+          </ul>
+        </nav>
+    {% endif %}
+    </div>
+{% endblock %}

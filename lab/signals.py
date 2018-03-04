@@ -67,14 +67,16 @@ def creat_permissions(sender,**kwargs):
     from django.contrib.contenttypes.models import ContentType
     from .models import User
     s,created = Group.objects.get_or_create(name='student')
+    s.permissions.clear()
     t,created = Group.objects.get_or_create(name='teacher')
+    t.permissions.clear()
     p,created = Group.objects.get_or_create(name='person')
+    p.permissions.clear()
     # apply_project = Permission.objects.filter(codename='apply_project').first()
     # apply_good = Permission.objects.filter(codename='apply_good').first()
     # apply_finding = Permission.objects.filter(codename='apply_finding').first()
     applys = Permission.objects.filter(codename__startswith='apply')
-    goods = Permission.objects.filter(codename__endswith='good')
+    add_good = Permission.objects.filter(codename = 'add_good').first()
+    t.permissions.add(add_good)
     for perm in applys:
         p.permissions.add(perm)
-    for perm in goods:
-        t.permissions.add(perm)

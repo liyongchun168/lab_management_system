@@ -9,6 +9,7 @@ from django.utils import timezone
 from django.core import validators
 from django.utils.translation import ugettext_lazy as _
 from django.core.mail import send_mail
+from django.core.exceptions import ValidationError
 
 
 class UserManager(BaseUserManager):
@@ -117,6 +118,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         Sends an email to this User.
         """
         send_mail(subject, message, from_email, [self.email], **kwargs)
+
+    def __uncode__(self):
+        return self.name
 #
 # class User(AbstractUser):
 #     '''实验室成员'''
@@ -203,12 +207,16 @@ class Project(models.Model):
     is_full= models.BooleanField(default=False)#人员是否收满了
     is_finish = models.BooleanField(default=False)#项目是否完成了
     plan = models.IntegerField(default=0) #进度
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.DateTimeField(auto_now_add=True)#创建时间
+    start_t = models.DateField(u'开始时间',blank=True,null=True)#项目开始时间
+    end_t = models.DateField(u'结束时间',blank=True,null=True)#项目结束时间
     leader = models.ForeignKey(User,blank=True,null=True,related_name='lead_project')#项目负责人,反查负责的项目
     is_active = models.BooleanField(default=True)#是否显示，删除直接讲这个字段改为false
 
     class Meta:
         ordering = ['-date']
+        verbose_name = u'项目'
+        verbose_name_plural = u'项目'
         permissions = (
             ("apply_project", u"可以申请项目"),
         )
@@ -263,21 +271,42 @@ class Finding(models.Model):
 
 class Good(models.Model):
     '''实验室物品'''
-    name = models.CharField(max_length=128)
-    add_date = models.DateTimeField(auto_now_add=True)
-    price = models.IntegerField(default=0)
-    num = models.IntegerField(default=1)
-    shi_yong_qing_kuang = models.CharField(max_length=128,default=u'无')
-    jie = models.CharField(max_length=128,default=u'无')#借给他人
-    ke_yong = models.BooleanField(default=True)#借给他人？是否能用
+    name = models.CharField(u'名称',max_length=128)
+    date = models.DateTimeField(u'添加时间',auto_now_add=True)
+    price = models.IntegerField(u'价格',blank=True)
+    all_num = models.IntegerField(u'个数',blank=True)
+    user_borrowed = models.ManyToManyField(User,blank=True,null=True,through='GoodBorrow')
+
+    @property
+    def active_num(self):
+        '''可借的数量'''
+
+        return self.all_num-sum([g.num for g in self.goodborrow_set.all()])
+
     class Meta:
-        ordering= ['-add_date']
+        ordering= ['-date']
+        verbose_name = u'物品'#在后台管理系统中显示
+        verbose_name_plural = u'物品'#上面的复数形式
         permissions = (
             ("apply_good", u"可以申请物品"),
         )
 
     def __unicode__(self):
         return self.name
+
+class GoodBorrow(models.Model):
+    good = models.ForeignKey(Good)
+    user = models.ForeignKey(User)
+    num = models.IntegerField(default=1)
+    created = models.DateTimeField(auto_now_add=True)
+    returned = models.DateTimeField(blank=True,null=True)
+    class Meta:
+        ordering = ['-created']
+
+    def clean(self):
+        if self.num > self.good.active_num:
+            raise ValidationError(u'这个物品不够了')
+
 
 class notice(models.Model):
     '''通知'''

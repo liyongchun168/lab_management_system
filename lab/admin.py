@@ -6,7 +6,8 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.utils.translation import ugettext, ugettext_lazy as _
 
-from .models import User
+from .models import User,Project,Good
+
 class UserCreationForm(forms.ModelForm):
     # error_messages = {
     #     'password_mismatch': _("The two password fields didn't match."),
@@ -91,3 +92,14 @@ admin.site.register(User, MyUserAdmin)
 # ... and, since we're not using Django's built-in permissions,
 # unregister the Group model from admin.
 # admin.site.unregister(Group)
+# class ProjectAdmin(admin.ModelAdmin):
+#     list_display = ['name', 'introduction', 'is_full', 'is_finish', 'date', 'leader']
+#     list_filter = ['is_full', 'is_finish']
+#     list_editable = ['name', 'introduction', 'is_full']
+# admin.site.register(Project,ProjectAdmin)
+#
+# class GoodAdmin(admin.ModelAdmin):
+#     list_display = ['name','price','num']
+#     list_editable = ['name','price','num']
+#
+# admin.site.register(Good,GoodAdmin)
