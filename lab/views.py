@@ -1,11 +1,11 @@
 # encoding:  utf-8
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render
-from .forms import GoodAddForm,GoodEditForm,ProjectPulishForm,LoginForm
+from .forms import GoodAddForm,GoodEditForm,ProjectPulishForm,LoginForm,GoodBorrowForm
 from django.http import HttpResponse,HttpResponseRedirect,HttpResponseForbidden,HttpResponseNotFound
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
-from .models import Good,Project,User,ProApprove
+from .models import Good,Project,User,ProApprove,GoodBorrow
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 from django.contrib.auth.decorators import permission_required,login_required
 
@@ -108,7 +108,7 @@ def user_list(request):
 #     return render(request,'user_add.html',{'form':form})
 
 @login_required
-@permission_required('lab.delete_labmember',raise_exception=True)
+@permission_required('lab.delete_user',raise_exception=True)
 def user_del(request,d):
     user_id = User.objects.get(id = d).user_id
     User.objects.get(id = d).delete()
@@ -116,7 +116,7 @@ def user_del(request,d):
     return HttpResponseRedirect(reverse('user-list'))
 
 
-
+@login_required
 def project_pulish(request):
     if request.method == 'POST':
         form = ProjectPulishForm(request.POST)
@@ -127,20 +127,25 @@ def project_pulish(request):
         form =ProjectPulishForm()
     return render(request, 'project_pulish.html', {'form':form})
 
+@login_required
+@permission_required('lab.delete_project',raise_exception=True)
 def project_delete(request,id):
     Project.objects.get(id = id).delete()
     return HttpResponseRedirect(reverse('project-list'))
 
+@login_required
 @permission_required('lab.apply_project',raise_exception=True)
 def project_apply(request, id):
     p = Project.objects.get(id = id)
     ProApprove.objects.create(project=p,user=request.user)
     return HttpResponseRedirect(reverse('project-list'))
 
+@login_required
 def project_message(request):
     p = ProApprove.objects.filter(project__leader=request.user).filter(status=2)
     return render(request, 'project_msg.html', {'pro_approves':p})
 
+@login_required
 def project_approve(request,p_id,status):
     if int(status)==1:
         ProApprove.objects.filter(id = p_id).update(status=1)
@@ -148,10 +153,12 @@ def project_approve(request,p_id,status):
         ProApprove.objects.filter(id = p_id).update(status=0)
     return HttpResponseRedirect(reverse('project-msg'))
 
+@login_required
 def project_mine(request):
     p = Project.objects.filter(users__id=request.user.id)
     return render(request, 'project_mine.html', {'projects':p})
 
+@login_required
 def project_list(request):
     plist = Project.objects.all()
     per_page = 20
@@ -194,8 +201,38 @@ def good_detail(request):
 def good_search(request):
     return
 
-def good_apply(request,g_id):
-    return
+# def good_apply(request,id):
+#     good = Good.objects.filter(id = id).first()
+#     good_borrow = GoodBorrow.objects.create(good=good,user=request.user)
+#     if request.method == 'POST':
+#         f = GoodBorrowForm(request.POST)
+#         if f.is_valid():
+#             f.save()
+#     else:
+#         f = GoodBorrowForm(user_id=request.user.id,good_id=good.id)
+#         return render(request,'good_apply.html',{'good':good,'goodf':f})
+# def good_apply(request):
+#     if request.method == 'POST':
+#         f = GoodBorrowForm(request.POST)
+
+def good_apply(request,id):
+    error = ''
+    good  = Good.objects.filter(id = id).first()
+    if request.method=='POST':
+        f  =GoodBorrowForm(request.POST)
+        if f.is_valid():
+            num = f.cleaned_data['num']
+            st = f.cleaned_data['start_t']
+            et = f.cleaned_data['end_t']
+            if num>good.active_num:
+                error = u'数量不够了'
+            else:
+                GoodBorrow.objects.create(user=request.user,good=good,num=num,start_t=st,end_t=et)
+                return HttpResponseRedirect(reverse('good-list'))
+    else:
+        f = GoodBorrowForm()
+    return render(request,'good_apply.html',{'form':f,'error_msg':error,'good':good})
+
 @login_required
 @permission_required('lab.delete_good',raise_exception=True)
 def good_del(request, id):

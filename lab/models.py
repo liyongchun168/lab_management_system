@@ -9,7 +9,6 @@ from django.utils import timezone
 from django.core import validators
 from django.utils.translation import ugettext_lazy as _
 from django.core.mail import send_mail
-from django.core.exceptions import ValidationError
 
 
 class UserManager(BaseUserManager):
@@ -275,7 +274,7 @@ class Good(models.Model):
     date = models.DateTimeField(u'添加时间',auto_now_add=True)
     price = models.IntegerField(u'价格',blank=True)
     all_num = models.IntegerField(u'个数',blank=True)
-    user_borrowed = models.ManyToManyField(User,blank=True,null=True,through='GoodBorrow')
+    user_borrowed = models.ManyToManyField(User,blank=True,through='GoodBorrow')
 
     @property
     def active_num(self):
@@ -295,17 +294,16 @@ class Good(models.Model):
         return self.name
 
 class GoodBorrow(models.Model):
-    good = models.ForeignKey(Good)
-    user = models.ForeignKey(User)
-    num = models.IntegerField(default=1)
-    created = models.DateTimeField(auto_now_add=True)
-    returned = models.DateTimeField(blank=True,null=True)
-    class Meta:
-        ordering = ['-created']
+    good = models.ForeignKey(Good,blank=True,null=True)
+    user = models.ForeignKey(User,blank=True,null=True)
+    num = models.IntegerField(u'数量',default=1)
+    start_t = models.DateField(u'开始时间',blank=True,null=True)
+    end_t = models.DateField(u'结束时间',blank=True,null=True)
+    status = models.IntegerField(default=2,choices=((0,u'不通过'),(1,u'通过'),(2,u'等待'),))
 
-    def clean(self):
-        if self.num > self.good.active_num:
-            raise ValidationError(u'这个物品不够了')
+    class Meta:
+        ordering = []
+
 
 
 class notice(models.Model):

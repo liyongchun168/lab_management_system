@@ -21,7 +21,7 @@
     {#    </form>#}
 
 
-        <table class="table table-striped">
+        <table class="table table-striped table-hover">
         {#    <caption>物品列表</caption>#}
             <thead>
                 <tr>
@@ -45,7 +45,7 @@
                                 <a href="{% url 'del_good' good.id %}"><span class="glyphicon glyphicon-trash"></span></a>
                                 <a href="{% url 'edit_good' good.id %}"><span class="glyphicon glyphicon-edit"></span></a>
                             {% else %}
-                                <a href="">申请</a>
+                                <a href="{% url 'good-reply' good.id %}">申请</a>
                         {% endif %}
 
                         </td>
