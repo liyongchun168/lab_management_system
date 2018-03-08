@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}
+物品申请信息
+{% endblock %}
+
+{% block content %}
+{% for foo in g %}
+    <p>{{ foo.user }}向你申请{{ foo.good }}从{{ foo.start_t }}到{{ foo.end_t }}
+        <a href="">同意</a><a href="">拒绝</a></p>
+{% endfor %}
+
+{% endblock %}
