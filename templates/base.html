@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -5,17 +6,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
     <title>{% block title %}title{% endblock %}</title>
-    <!-- Bootstrap -->
-    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    <link href="{% static 'bootstrap/css/bootstrap.css' %}" rel="stylesheet">
     {% block style %}{% endblock %}
 {% endblock %}
 </head>
@@ -70,7 +62,7 @@
                         <li><a href="{% url 'good-list' %}"> 物品信息</a></li>
                         {% if user.is_superuser %}
                             <li role="separator" class="divider"></li>
-                        <li><a href=" "> 物品申请通知</a></li>
+                        <li><a href="{% url 'good-msg' %}"> 物品申请通知</a></li>
                         {% endif %}
 
                         <li role="separator" class="divider"></li>
@@ -88,10 +80,8 @@
 </nav>
   {% endblock %}
     {% block content %}{% endblock %}
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
     {% block script %}
 
     {% endblock %}

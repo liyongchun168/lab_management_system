@@ -24,11 +24,11 @@ urlpatterns = [
     # url(r'^register/$','lab.views.register',name='register'),
 
     url(r'^good/list/$', 'lab.views.good_list', name='good-list'),
-    url('r^/good/(\d+)','lab.views.good_detail',name='good_detail'),
+    url('r^good/(\d+)','lab.views.good_detail',name='good_detail'),
     url(r'^good/del/(\d+)$', 'lab.views.good_del', name='del_good'),
     url(r'^good/edit/(\d+)$', 'lab.views.good_edit', name='edit_good'),
     url(r'^good/reply/(\d+)$','lab.views.good_apply',name='good-reply'),
-
+    url(r'^good/message$','lab.views.good_message',name='good-msg'),
     url(r'^money/$','lab.views.money',name='money'),
     url(r'^money/edit/(\d+)','lab.views.edit_money',name='edit_money'),
     url(r'^money/del/(\d+)','lab.views.del_money',name='del_money'),

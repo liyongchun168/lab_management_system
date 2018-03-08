@@ -80,7 +80,7 @@ class GoodBorrowForm(forms.Form):
         st = cleaned_data.get('start_t')
         et = cleaned_data.get('end_t')
         if st and et:#必须有这句，因为st或et可能为空
-            if st>et:
+            if st>=et:
                 raise ValidationError(u'开始时间必须比结束时间早')
         return cleaned_data
 

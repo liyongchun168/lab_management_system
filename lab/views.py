@@ -233,11 +233,15 @@ def good_apply(request,id):
         f = GoodBorrowForm()
     return render(request,'good_apply.html',{'form':f,'error_msg':error,'good':good})
 
+def good_message(request):
+    g = GoodBorrow.objects.filter(status=2)
+    return render(request,'good_msg.html',{'g':g})
+
 @login_required
 @permission_required('lab.delete_good',raise_exception=True)
 def good_del(request, id):
     Good.objects.get(id = id).delete()
-    return HttpResponseRedirect(reverse('good'))
+    return HttpResponseRedirect(reverse('good-list'))
 
 @login_required
 @permission_required('lab.change_good',raise_exception=True)

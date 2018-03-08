@@ -42,7 +42,7 @@
 
                         <td>
                             {% if user.is_superuser %}
-                                <a href="{% url 'del_good' good.id %}"><span class="glyphicon glyphicon-trash"></span></a>
+                                <span id="{{ good.id }}" class="del glyphicon glyphicon-trash"></span>
                                 <a href="{% url 'edit_good' good.id %}"><span class="glyphicon glyphicon-edit"></span></a>
                             {% else %}
                                 <a href="{% url 'good-reply' good.id %}">申请</a>
@@ -84,4 +84,16 @@
         </nav>
     {% endif %}
     </div>
+    {% block script %}
+        <script>
+        $(document).ready(function () {
+            $(".del").click(function () {
+                var id = $(this).attr("id");
+                $.get("{% url 'del_good'  %}",function () {
+                    alert("删除成功");
+                });
+            });
+        });
+        </script>
+    {% endblock %}
 {% endblock %}

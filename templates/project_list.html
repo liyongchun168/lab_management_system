@@ -4,6 +4,7 @@
 项目列表
 {% endblock %}
 {% block content %}
+
     <div class="container">
     <table class="table table-striped">
         <caption>可申请项目</caption>
@@ -25,7 +26,7 @@
                     <td><a href="{% url 'user-detail' project.leader.id %}">{{ project.leader.name }}</a></td>
                     <td>
                         {% if perms.lab.delete_project %}
-                            <a href="{% url 'project-del' project.id %}">删除</a>
+                            <a id="del" href="{% url 'project-del' project.id %}">删除</a>
                         {% else %}
                             {% if perms.lab.apply_project %}
                                 {% if project|have_user:request.user %}
@@ -79,6 +80,15 @@
     </nav>
     {% endif %}
 </div>
- 
+
 {% endblock %}
 
+{% block script %}
+<script type="text/javascript">
+$(document).ready(function(){
+  $("#del").click(function(){
+      alert("nihao");
+  });
+});
+</script>
+{% endblock %}
