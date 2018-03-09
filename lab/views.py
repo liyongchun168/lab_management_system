@@ -1,6 +1,8 @@
 # encoding:  utf-8
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+
 from .forms import GoodAddForm,GoodEditForm,ProjectPulishForm,LoginForm,GoodBorrowForm
 from django.http import HttpResponse,HttpResponseRedirect,HttpResponseForbidden,HttpResponseNotFound
 from django.core.urlresolvers import reverse
@@ -195,8 +197,9 @@ def good_list(request):
         goods = paginator.page(paginator.num_pages)
     return render(request, 'good-list.html', {'goods':goods})
 
-def good_detail(request):
-    return
+def good_detail(request,id):
+    good = Good.objects.filter(id = id).first()
+    return render(request,'good_detail.html',{'good':good})
 
 def good_search(request):
     return
@@ -238,10 +241,12 @@ def good_message(request):
     return render(request,'good_msg.html',{'g':g})
 
 @login_required
+@csrf_exempt
 @permission_required('lab.delete_good',raise_exception=True)
-def good_del(request, id):
+def good_del(request):
+    id = request.POST.get('id')
     Good.objects.get(id = id).delete()
-    return HttpResponseRedirect(reverse('good-list'))
+    return HttpResponse("delete success!")
 
 @login_required
 @permission_required('lab.change_good',raise_exception=True)

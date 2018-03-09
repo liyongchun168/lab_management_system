@@ -35,7 +35,7 @@
             <tbody>
                 {% for good in goods %}
                     <tr>
-                        <td>{{ good.id }}</td>
+                        <td><a href="{% url 'good_detail' good.id %}">{{ good.id }}</a></td>
                         <td>{{ good.name }}</td>
                         <td>{{ good.price }}</td>
                         <td>{{ good.active_num }}/{{ good.all_num }}</td>
@@ -88,9 +88,13 @@
         <script>
         $(document).ready(function () {
             $(".del").click(function () {
-                var id = $(this).attr("id");
-                $.get("{% url 'del_good'  %}",function () {
-                    alert("删除成功");
+                if(!confirm("确认删除吗？")){
+                    return false;
+                }
+                var self = this;
+                var goodid = $(this).attr("id");
+                $.post("{% url 'del_good' %}",{'id':goodid},function () {
+                    $(self).parent().parent().remove()
                 });
             });
         });

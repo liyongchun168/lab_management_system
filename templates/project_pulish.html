@@ -1,18 +1,34 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
 {% load bootstrap3 %}
 {% block title %}
 发布项目
 {% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}">
+{% endblock %}
+
 
 {% block content %}
     <div class="row">
     <div class="col-md-4 col-md-offset-4">
         <form action="" method="post" role="form" class="form">
             {% csrf_token %}
-            {% bootstrap_form form %}
+            <p>名称：{{ form.name }}</p>
+            <p>介绍：{{ form.introduction }}</p>
+            <p>项目开始时间：{{ form.start_t }}</p>
+            <p>项目结束时间：{{ form.end_t }}</p>
             <button class="btn btn-default" type="submit">发布项目！</button>
         </form>
-        <p class="alert-warning">注意：时间的格式类似2017-1-1</p>
         </div>
     </div>
+{% endblock %}
+{% block script %}
+    <script src="{% static 'js/jquery-ui.js' %}"></script>
+    <script>
+  $(function() {
+    $( "#id_start_t,#id_end_t" ).datepicker();
+  });
+    </script>
 {% endblock %}
