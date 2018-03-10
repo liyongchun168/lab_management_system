@@ -7,6 +7,12 @@
 
 {% block style %}
     <link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}">
+    <style>
+    .error{
+        color: red;
+        font-weight: normal;
+    }
+    </style>
 {% endblock %}
 
 
@@ -15,10 +21,7 @@
     <div class="col-md-4 col-md-offset-4">
         <form action="" method="post" role="form" class="form">
             {% csrf_token %}
-            <p>名称：{{ form.name }}</p>
-            <p>介绍：{{ form.introduction }}</p>
-            <p>项目开始时间：{{ form.start_t }}</p>
-            <p>项目结束时间：{{ form.end_t }}</p>
+            {% bootstrap_form form %}
             <button class="btn btn-default" type="submit">发布项目！</button>
         </form>
         </div>
@@ -26,9 +29,29 @@
 {% endblock %}
 {% block script %}
     <script src="{% static 'js/jquery-ui.js' %}"></script>
+    <script src="{% static 'js/jquery.validate.js' %}"></script>
+    <script src="{% static 'js/messages_zh.js' %}"></script>
     <script>
   $(function() {
-    $( "#id_start_t,#id_end_t" ).datepicker();
+    $("#id_start_t,#id_end_t").datepicker({dateFormat: "yy-mm-dd"});
+    $(".form").validate({
+        rules:{
+            name:{
+                required:true
+            },
+            introduction:{
+                required:true
+            },
+            start_t:{
+                required:true,
+                dateISO:true
+            },
+            end_t:{
+                required:true,
+                dateISO:true
+            }
+        }
+    })
   });
     </script>
 {% endblock %}

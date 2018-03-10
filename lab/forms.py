@@ -87,7 +87,7 @@ class GoodBorrowForm(forms.Form):
 class ProjectPulishForm(forms.ModelForm):
     class Meta:
         model = Project
-        fields = ('name','introduction','start_t','end_t')
+        fields = ('name','start_t','end_t','introduction')
 
     def save_it(self, u):
         p = self.save()#这个必须要先创建，不然在多对多关联的时候没有对象报错
