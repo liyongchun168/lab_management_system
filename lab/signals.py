@@ -1,3 +1,4 @@
+# encoding: utf-8
 
 from django.db.models.signals import post_save,post_migrate
 from django.dispatch import receiver
@@ -76,7 +77,6 @@ def creat_permissions(sender,**kwargs):
     # apply_good = Permission.objects.filter(codename='apply_good').first()
     # apply_finding = Permission.objects.filter(codename='apply_finding').first()
     applys = Permission.objects.filter(codename__startswith='apply')
-    add_good = Permission.objects.filter(codename = 'add_good').first()
-    t.permissions.add(add_good)
+    # add_good = Permission.objects.filter(codename = 'add_good').first()
     for perm in applys:
-        p.permissions.add(perm)
+        p.permissions.add(perm)#所有人都可以申请物品项目，资金

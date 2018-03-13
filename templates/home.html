@@ -5,65 +5,60 @@
 项目进度
 {% endblock %}
 
-{% block head %}
-    {{ block.super }}
+{% block style %}
     <link rel="stylesheet" href="{% static 'css/home_page.css' %}" type="text/css">
 {% endblock %}
 
 {% block content %}
-<div class="main">
-    <div class="tab1">
+<div class="row">
 
+    <div class="row ">
         <!--消息通知-->
-        <div class="info panel panel-default col-md-5 col-md-offset-1">  
-            <div class="panel panel-heading">  
-                <h4 class="panel-title">  
-                    <span class="title">消息通知</span>
-                    <span class="more"><a href=""><span class="glyphicon glyphicon-hand-right"></span> 更多</a></span>
-                </h4> 
-            </div>
-            <div class="panel-body" style="line-height:40px; ">  
-                <div class="col-sm-12 left-menu"><span class="glyphicon glyphicon-paperclip"> </span> </div>
-                <div class="col-sm-12 left-menu"><span class="glyphicon glyphicon-paperclip"> </span> </div>
-                <div class="col-sm-12 left-menu"><span class="glyphicon glyphicon-paperclip"> </span> </div>
-                <div class="col-sm-12 left-menu"><span class="glyphicon glyphicon-paperclip"> </span> </div>
+        <div class="col-md-5 col-md-offset-1">
+            <div class="panel ">
+                <div class="panel-heading">
+                    <h4>消息通知</h4>
+                </div>
+                <div class="panel-body">
+                    <p><span class="glyphicon glyphicon-paperclip"> </span> </p>
+                    <p><span class="glyphicon glyphicon-paperclip"> </span> </p>
+                    <p><span class="glyphicon glyphicon-paperclip"> </span> </p>
+                    <p><span class="glyphicon glyphicon-paperclip"> </span> </p>
+                    <p><span class="glyphicon glyphicon-paperclip"> </span> </p>
+                </div>
             </div>
         </div>
         <!--个人信息-->
-        <div class="personal_info panel panel-default col-md-5">
-            <div class="panel panel-heading">  
-                <h4 class="panel-title">  
-                    <span class="title">个人信息</span>
-                    <span class="more"><a href="{% url 'user-detail' user.id %}"><span class="glyphicon glyphicon-hand-right"></span> 更多</a></span>
-                </h4> 
+        <div class="col-md-5">
+            <div class="panel">
+            <div class="panel-heading">
+                <h4>个人信息</h4>
             </div>
             <div class="panel-body">  
-                <div class="col-sm-6">
                     <p>学号：{{ user.std_id }}</p>
                     <p>姓名：{{ user.name }}</p>
                     <p>学院：{{ user.institute }}</p>
-{#                    <p>教师级别：</p>#}
-{#                    <p>科研成果：</p>#}
-                </div>
-                <div class="picture col-sm-6">
-                    <img src="" alt="">
-                </div>
+                    <p>专业</p>
+                    <p>年级</p>
             </div>
+        </div>
         </div>
     </div>
 
-    <div class="tab2">
+    <div class="row">
         <!--项目进度-->
-        <div class="col-md-10 col-md-offset-1">
-            <table class="table table-responsive table-striped">
-                <thead>
-                    <tr>
-                        <th class="tab2-title">项目名称</th>
-                        <th class="tab2-title">项目进度
-                            <span class="more"><a href=""><span class="glyphicon glyphicon-hand-right"></span> 更多</a></span>
-                        </th>
-                    </tr>
-                </thead>
+        <div class=" col-md-offset-1 col-md-10">
+            <div class="panel">
+            <div class="panel-heading">
+                <h4>项目信息</h4>
+            </div>
+            <table class="table table-hover">
+{#                <thead>#}
+{#                    <tr>#}
+{#                        <th class="tab2-title">项目名称</th>#}
+{#                        <th class="tab2-title">项目进度</th>#}
+{#                    </tr>#}
+{#                </thead>#}
                 <tbody>
                     <tr>
                         <td>项目一</td>
@@ -92,20 +87,22 @@
                 </tbody>
             </table>
         </div>
+        </div>
     </div>
 
-    <div class="tab3">
+    <div class="row">
             <!--物品信息-->
-            <div class="things col-md-6 col-md-offset-1">
-                <h4>物品信息
-                    <span class="more"><a href=""><span class="glyphicon glyphicon-hand-right"></span> 更多</a></span>
-                </h4>
-                <table class="table table-responsive ">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h4>物品信息</h4>
+                </div>
+                <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>物品名称</th>
-                        <th>物品位置</th>
-                        <th>是否可借</th>
+                        <th>名称</th>
+                        <th>价格</th>
+                        <th>数量</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -129,27 +126,16 @@
                         <td> 实验室一</td>
                         <td> 是</td>
                     </tr>
+                    <tr>
+                        <td>物品四</td>
+                        <td> 实验室一</td>
+                        <td> 是</td>
+                    </tr>
                 </tbody>
             </table>
             </div>
+        </div>
 
-            <!--经费使用-->
-            <div class="money col-md-4">
-                <br/>
-                <br/>
-                <h4>经费使用
-                    <span class="more"><a href=""><span class="glyphicon glyphicon-hand-right"></span> 更多</a></span>
-                </h4>
-                <br/>
-                <br/>
-                <div class="row col-md-offset-1">
-                    <p><span class="glyphicon glyphicon-play"></span> 总经费消耗：</p>
-                </div>
-                <br/>
-                <div class="row col-md-offset-1">
-                    <p><span class="glyphicon glyphicon-play"></span> 剩余经费：</p>
-                </div>
-            </div>
         </div>
 </div>
 {% endblock %}

@@ -7,7 +7,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}title{% endblock %}</title>
-    <link href="{% static 'bootstrap/css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+{#    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap-theme.css' %}">#}
+    <style>
+    body{
+        background-color: #f6f6f6;
+    }
+
+    </style>
+
     {% block style %}{% endblock %}
 {% endblock %}
 </head>
@@ -80,8 +88,23 @@
 </nav>
   {% endblock %}
     {% block content %}{% endblock %}
+
+
+
     <script src="{% static 'js/jquery.js' %}"></script>
     <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+  <script>
+      {#控制导航栏鼠标划过自动展开#}
+      $(function () {
+        $(".dropdown").mouseover(function () {
+            $(this).addClass("open");
+        });
+
+        $(".dropdown").mouseleave(function(){
+            $(this).removeClass("open");
+        })
+})
+  </script>
     {% block script %}{% endblock %}
   </body>
 </html>
