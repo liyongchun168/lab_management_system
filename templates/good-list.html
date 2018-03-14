@@ -10,9 +10,7 @@
         vertical-align: middle!important;
 }
 
-    .del{{#更改删除按钮的默认颜色#}
-        color: #337ab7;
-    }
+
     </style>
 {% endblock %}
 
@@ -25,7 +23,7 @@
     {#    </form>#}
 
 
-        <table class="table table-striped table-hover">
+        <table class="table table-hover">
         {#    <caption>物品列表</caption>#}
             <thead>
                 <tr>
@@ -46,7 +44,7 @@
 
                         <td>
                             {% if user.is_superuser %}
-                                <span id="{{ good.id }}" class="del glyphicon glyphicon-trash"></span>
+                                <a href="javascript:void(0);"><span id="{{ good.id }}" class="del glyphicon glyphicon-trash"></span></a>
                                 <a href="{% url 'edit_good' good.id %}"><span class="glyphicon glyphicon-edit"></span></a>
                             {% else %}
                                 <a href="{% url 'good-reply' good.id %}">申请</a>
@@ -59,7 +57,7 @@
             </tbody>
         </table>
         {% if goods.has_next %}
-        <nav aria-label="Page navigation">
+        <nav aria-label="Page navigation" style="float: right;">
           <ul class="pagination">
               {% if goods.has_previous %}
                   <li>
@@ -98,7 +96,7 @@
                 var self = this;
                 var goodid = $(this).attr("id");
                 $.post("{% url 'del_good' %}",{'id':goodid},function () {
-                    $(self).parent().parent().remove()
+                    $(self).parent().parent().parent().remove()
                 });
             });
         });

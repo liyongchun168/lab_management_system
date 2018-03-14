@@ -8,10 +8,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}title{% endblock %}</title>
     <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-{#    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap-theme.css' %}">#}
+    <link rel="icon" href="{% static 'img/logo-nav.png' %}">
     <style>
     body{
         background-color: #f6f6f6;
+    }
+    .logo{
+        height: 20px;
+        width: 20px;
     }
 
     </style>
@@ -22,21 +26,19 @@
   <body>
   {% block nav %}
       <nav class="navbar navbar-default">
-        <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href=" ">   </a>
-        </div>
-
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{% url 'homepage' %}"><img class="logo" src="{% static 'img/logo-nav.png' %}" alt=""></a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-            <li class="active"><a href="{% url 'homepage' %}"><span class="glyphicon glyphicon-home"></span> 首页</a></li>
+            <li><a href="{% url 'homepage' %}"><span class="glyphicon glyphicon-home"></span> 首页</a></li>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                     <span class="glyphicon glyphicon-tasks"></span> 项目进度 <span class="caret"></span></a>
@@ -78,6 +80,15 @@
 
                     </ul>
                 </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                    <span class="glyphicon glyphicon-briefcase"></span> 信息中心 <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'message-list' %}"> 所有信息</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="{% url 'message-push' %}"> 发布信息</a></li>
+                    </ul>
+                </li>
             <li class=" "><a href="#"><span class="glyphicon glyphicon-user"></span>实验室成员</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -87,8 +98,9 @@
   </div>
 </nav>
   {% endblock %}
+  <div class="container">
     {% block content %}{% endblock %}
-
+  </div>
 
 
     <script src="{% static 'js/jquery.js' %}"></script>

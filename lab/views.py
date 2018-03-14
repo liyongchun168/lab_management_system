@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
-from .forms import GoodAddForm,GoodEditForm,ProjectPulishForm,LoginForm,GoodBorrowForm
+from .forms import GoodAddForm,GoodEditForm,ProjectPulishForm,LoginForm,GoodBorrowForm,MessageAddForm
 from django.http import HttpResponse,HttpResponseRedirect,HttpResponseForbidden,HttpResponseNotFound
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
@@ -148,12 +148,15 @@ def project_message(request):
     return render(request, 'project_msg.html', {'pro_approves':p})
 
 @login_required
-def project_approve(request,p_id,status):
-    if int(status)==1:
-        ProApprove.objects.filter(id = p_id).update(status=1)
+@csrf_exempt
+def project_approve(request):
+    id = request.POST.get('id')
+    status = request.POST.get('status')
     if int(status)==0:
-        ProApprove.objects.filter(id = p_id).update(status=0)
-    return HttpResponseRedirect(reverse('project-msg'))
+        ProApprove.objects.filter(id = id).update(status=0)
+    else:
+        ProApprove.objects.filter(id = id).update(status=1)
+    return HttpResponse('ok')
 
 @login_required
 def project_mine(request):
@@ -273,5 +276,17 @@ def del_money(request):
     pass
 
 
+def message_list(request):
+    return render(request, 'message-list.html')
 
+def message_push(request):
+    if request.method == 'POST':
+        form = MessageAddForm(request.POST)
+        msg = form.save()
+        msg.user = request.user
+        msg.save()
+        return HttpResponseRedirect(reverse('message-list'))
+    else:
+        form = MessageAddForm()
+    return render(request, 'message-push.html', {'form':form})
 

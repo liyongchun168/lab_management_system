@@ -4,19 +4,48 @@
 {% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-4 col-md-offset-1">
-        {% if pro_approves %}
+<div class="container">
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>项目名称</th>
+                <th>申请人</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
             {% for p in pro_approves %}
-            <p>
-                {{ p.user.name }}向你申请{{ p.project.name }}项目
-                <span><a href="{% url 'project-app' p.id 1 %}">通过</a>
-                </span><a href="{% url 'project-app' p.id 0 %}">拒绝</a>
-            </p>
-        {% endfor %}
-        {% else %}
-            <p>暂时没有项目通知哦</p>
-        {% endif %}
-    </div>
+                <tr>
+                    <td>{{ p.project.name }}</td>
+                    <td>{{ p.user.name }}</td>
+                    <td>
+                        <a id="{{ p.id }}" class="successed" href="javascript:void(0);"><span class="glyphicon glyphicon-ok"></span></a>
+                        <a id="{{ p.id }}" class="failed" href="javascript:void(0);"><span class="glyphicon glyphicon-remove"></span></a>
+                    </td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
 </div>
+{% endblock %}
+{% block script %}
+    <script>
+    $(document).ready(function () {
+        $(".successed").click(function () {
+            id = $(this).attr("id");
+            self = this;
+            $.post("{% url 'project-app' %}",{'id':id,'status':1},function () {
+                $(self).parent().parent().remove();
+            });
+        });
+        $(".failed").click(function () {
+            id = $(this).attr("id");
+            self = this;
+            $.post("{% url 'project-app' %}",{'id':id,'status':0},function () {
+                $(self).parent().parent().remove();
+            });
+        })
+    });
+    </script>
 {% endblock %}

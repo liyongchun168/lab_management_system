@@ -3,7 +3,7 @@
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import RegexValidator
-from .models import Good,Project,User,ProApprove,GoodBorrow
+from .models import Good,Project,User,ProApprove,GoodBorrow,Message
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
@@ -102,3 +102,8 @@ class ProjectPulishForm(forms.ModelForm):
         # u.user_premissions.add(apply_premission,delete_premission)#给项目发起人
         # u.user_permissions.add(delete_prem)
         return p
+
+class MessageAddForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ('title','content')

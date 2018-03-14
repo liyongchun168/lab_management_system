@@ -242,14 +242,10 @@ class Project(models.Model):
     def __unicode__(self):
         return self.name
 
-
-
 class ProApprove(models.Model):
     project = models.ForeignKey(Project,blank=True,null=True)
     user = models.ForeignKey(User)
     status = models.IntegerField(default=2,choices=((0,u'不通过'),(1,u'通过'),(2,u'等待'),))
-
-
 
 class Finding(models.Model):
     '''资金申请'''
@@ -265,8 +261,6 @@ class Finding(models.Model):
 
     def __unicode__(self):
         return self.purpose
-
-
 
 class Good(models.Model):
     '''实验室物品'''
@@ -304,13 +298,12 @@ class GoodBorrow(models.Model):
     class Meta:
         ordering = []
 
-
-
-class notice(models.Model):
+class Message(models.Model):
     '''通知'''
-    labmember =models.ForeignKey(settings.AUTH_USER_MODEL)
-    title = models.CharField(max_length=20)
-    content = models.TextField()
+    user =models.ForeignKey(settings.AUTH_USER_MODEL,null=True,blank=True)
+    title = models.CharField(u'标题',max_length=50)
+    content = models.TextField(u'内容')
+    date = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
         return self.title

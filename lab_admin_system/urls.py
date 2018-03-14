@@ -21,8 +21,6 @@ urlpatterns = [
     url(r'^$','lab.views.home_page', name='homepage'),
     url(r'^login/$','lab.views.login_view',name='login'),
     url(r'^logout/$','django.contrib.auth.views.logout',{'next_page':'/login/'},name='logout'),
-    # url(r'^register/$','lab.views.register',name='register'),
-
     url(r'^good/list/$', 'lab.views.good_list', name='good-list'),
     url(r'^good/(\d+)','lab.views.good_detail',name='good_detail'),
     url(r'^good/del/$', 'lab.views.good_del', name='del_good'),
@@ -38,18 +36,10 @@ urlpatterns = [
     url(r'^project/del/(\d+)$','lab.views.project_delete',name='project-del'),
     url(r'^project/apply/(\d+)$','lab.views.project_apply',name='project-apply'),
     url(r'^project/message/$','lab.views.project_message',name='project-msg'),
-    url(r'^project/approve/(\d+)/(\d)$','lab.views.project_approve',name='project-app'),
+    url(r'^project/approve/$','lab.views.project_approve',name='project-app'),
     url(r'^project/mine/$', 'lab.views.project_mine', name='project-mine'),
-
     url(r'^user/(\d+)', 'lab.views.user_detail', name='user-detail'),
-    # url(r'^user/edit/$','lab.views.user_edit',name='user-edit'),
-    # url(r'^user/add/$', 'lab.views.user_add', name='user-add'),
-    # url(r'^user/del/(\d+)','lab.views.user_del',name='user-del'),
     url(r'^user/list/$', 'lab.views.user_list', name='user-list'),
-
-    # url(r'^person/$','lab.views.person',name='person'),
-    # url(r'^good/(\d*)/$','lab.views.good_detail',name='good_detail')
-
-    # url(r'^student/$','lab.views.student',name='student'),
-    # url(r'^test/$','lab.views.test',name='test')
+    url(r'^message/list/$','lab.views.message_list',name='message-list'),
+    url(r'^message/push/$','lab.views.message_push',name='message-push'),
     ]
