@@ -22,7 +22,7 @@ urlpatterns = [
     url(r'^login/$','lab.views.login_view',name='login'),
     url(r'^logout/$','django.contrib.auth.views.logout',{'next_page':'/login/'},name='logout'),
     url(r'^good/list/$', 'lab.views.good_list', name='good-list'),
-    url(r'^good/(\d+)','lab.views.good_detail',name='good_detail'),
+    url(r'^good/(\d+)$','lab.views.good_detail',name='good_detail'),
     url(r'^good/del/$', 'lab.views.good_del', name='del_good'),
     url(r'^good/edit/(\d+)$', 'lab.views.good_edit', name='edit_good'),
     url(r'^good/reply/(\d+)$','lab.views.good_apply',name='good-reply'),
@@ -42,4 +42,5 @@ urlpatterns = [
     url(r'^user/list/$', 'lab.views.user_list', name='user-list'),
     url(r'^message/list/$','lab.views.message_list',name='message-list'),
     url(r'^message/push/$','lab.views.message_push',name='message-push'),
+    url(r'^message/(\d+)$','lab.views.message_detail',name='message-detail'),
     ]

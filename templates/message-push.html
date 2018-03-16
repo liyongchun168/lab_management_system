@@ -3,10 +3,18 @@
 {% block title %}
 发布消息
 {% endblock %}
+{% block style %}
+    <style>
+        body{background-color: white}
+
+    </style>
+{% endblock %}
 {% block content %}
+    <div class="col-md-8 col-md-offset-2">
     <form method="post" role="form">
         {% csrf_token %}
         {% bootstrap_form form %}
         <button class="btn btn-default" type="submit">发布！</button>
     </form>
+    </div>
 {% endblock %}

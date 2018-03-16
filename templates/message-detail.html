@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div>
+    <div class="title">
+        <h4>{{ msg.title }}</h4>
+        <span class="text-muted">{{ msg.user }}  {{ msg.date }}</span>
+    </div>
+    <div class="content">
+        <p>{{ msg.content }}</p>
+    </div>
+</div>
+{% endblock %}

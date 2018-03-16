@@ -9,20 +9,14 @@
         text-align: center;
         vertical-align: middle!important;
 }
+    .mytable{background-color: white;padding: 20px 0;margin-top: 30px;}
 
 
     </style>
 {% endblock %}
 
 {% block content %}
-    <div class="container">
-    {#    <form class="form-inline" role="form" method="POST">#}
-    {#        {% csrf_token %}#}
-    {#        {% bootstrap_form good_form %}#}
-    {#      <button type="submit" class="btn btn-default">添加</button>#}
-    {#    </form>#}
-
-
+    <div class="mytable clearfix">
         <table class="table table-hover">
         {#    <caption>物品列表</caption>#}
             <thead>
@@ -56,37 +50,37 @@
                 {% endfor %}
             </tbody>
         </table>
-        {% if goods.has_next %}
-        <nav aria-label="Page navigation" style="float: right;">
-          <ul class="pagination">
-              {% if goods.has_previous %}
-                  <li>
-                      <a href="?page={{ goods.previous_page_number }}" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
+            <nav class="nav pull-right">
+              <ul class="pagination">
+                  {% if goods.has_previous %}
+                      <li>
+                          <a href="?page={{ goods.previous_page_number }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                          </a>
+                      </li>
+                  {% endif %}
+
+                {%  for pg in goods.paginator.page_range %}
+                    {% if goods.number == pg %}
+                        <li class="active"><a href="?page={{ pg }}">{{ pg }}</a></li>
+                    {% else %}
+                        <li><a href="?page={{ pg }}">{{ pg }}</a></li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if goods.has_next %}
+                    <li>
+                      <a href="?page={{ goods.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
                       </a>
-                  </li>
-              {% endif %}
-
-            {%  for pg in goods.paginator.page_range %}
-                {% if goods.number == pg %}
-                    <li class="active"><a href="?page={{ pg }}">{{ pg }}</a></li>
-                {% else %}
-                    <li><a href="?page={{ pg }}">{{ pg }}</a></li>
-                {% endif %}
-            {% endfor %}
-
-            {% if goods.has_next %}
-                <li>
-                  <a href="?page={{ goods.next_page_number }}" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                  </a>
-                </li>
-                {% endif %}
-          </ul>
-        </nav>
-    {% endif %}
+                    </li>
+                    {% endif %}
+              </ul>
+            </nav>
     </div>
-    {% block script %}
+{% endblock %}
+
+{% block script %}
         <script>
         $(document).ready(function () {
             $(".del").click(function () {
@@ -102,4 +96,3 @@
         });
         </script>
     {% endblock %}
-{% endblock %}

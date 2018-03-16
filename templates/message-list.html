@@ -3,6 +3,29 @@
 消息通知
 {% endblock %}
 
+{% block style %}
+    <style>
+        h4{font-weight: bold;padding-bottom: 10px}
+        .board{height: 600px;background-color: white;padding: 30px;margin-top: 30px}
+        .board-content{border-top:2px rgb(25, 149, 220) solid;padding-top: 20px}
+        hr{margin-top: 5px}
+        .text-muted{margin-bottom: 0}
+    </style>
+{% endblock %}
+
 {% block content %}
-消息通知
+<div class="board">
+    <h4>消息中心</h4>
+    <div class="board-content">
+        {% for msg in msgs %}
+            <div>
+            <p><a style="color:#555555" href="{% url 'message-detail' msg.id %}">{{ msg.title }}</a></p>
+            <p class="text-muted">{{ msg.date }}</p>
+        </div>
+            <hr>
+        {% endfor %}
+
+
+    </div>
+</div>
 {% endblock %}
